@@ -116,6 +116,12 @@ alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
 
+alias ls="lsd"
+alias bat="batcat --theme=Dracula"
+alias cat="batcat --paging=never --theme=Dracula"
+alias upd="sudo apt update && sudo apt upgrade -y"
+alias tracert="traceroute"
+
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -136,4 +142,4 @@ if ! shopt -oq posix; then
   fi
 fi
 
-neofetch
+

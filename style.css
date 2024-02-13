@@ -1,0 +1,13 @@
+body {
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+ }
+ code {
+    color: black;
+    background-color: lightgrey;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    border: 10px;
+    border-radius: 5px;
+ }
+ 
