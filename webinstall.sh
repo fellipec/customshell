@@ -19,8 +19,8 @@ for i in $INSTALL_PKGS; do
     fi
 done
 #yt-dlp from the repos are not always update
-echo -e "\nInstalling yt-dlp..."
-sudo curl https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp --output /usr/local/bin/yt-dlp
+echo -e "\nInstalling/updating yt-dlp..."
+sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp --output /usr/local/bin/yt-dlp
 #before tldr can be used, it needs to be updated
 echo -e "\nUpdating tldr..."
 tldr --update
@@ -40,7 +40,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         if ! [[ -e ~/.config/sakura ]]; then
             mkdir ~/.config/sakura
         fi
-        curl https://clementine.fellipec.com/cs/sakura.conf --output ~/.config/sakura/sakura.conf
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/sakura.conf --output ~/.config/sakura/sakura.conf
         sudo update-alternatives --set x-terminal-emulator /usr/bin/sakura
     fi
 
@@ -48,7 +48,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     if ! [[ -e ~/.fonts/MesloLGS\ NF\ Regular.ttf ]]; then
         echo -e "\n\nInstalling fonts..."
         mkdir ~/.fonts
-        curl --retry 5 https://clementine.fellipec.com/cs/fonts.tar.gz | tar xz --directory=$HOME/.fonts
+        curl --retry 5 https://raw.githubusercontent.com/fellipec/customshell/main/fonts.tar.gz | tar xz --directory=$HOME/.fonts
         fc-cache
     else
         echo -e "\n\nFonts installed, skipping"
@@ -75,8 +75,8 @@ fi
 
 
 echo -e "\n\nDownloading new configuration..."
-curl https://clementine.fellipec.com/cs/zshrc --output ~/.zshrc
-curl https://clementine.fellipec.com/cs/bashrc --output ~/.bashrc
+curl -L https://raw.githubusercontent.com/fellipec/customshell/main/zshrc --output ~/.zshrc
+curl -L https://raw.githubusercontent.com/fellipec/customshell/main/bashrc --output ~/.bashrc
 
 
 
@@ -96,16 +96,16 @@ read -p "Pick an option: " PTKFLAVOR
 
 if [[ $PTKFLAVOR == '2' ]]; then
     echo -e "Copy Powerlevel 10k Color config..."
-    curl https://clementine.fellipec.com/cs/p10k.zsh.color --output ~/.p10k.zsh
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.color --output ~/.p10k.zsh
 elif [[ $PTKFLAVOR == '3' ]]; then
     echo -e "Copy Powerlevel 10k Laptop config..."
-    curl https://clementine.fellipec.com/cs/p10k.zsh.laptop --output ~/.p10k.zsh
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.laptop --output ~/.p10k.zsh
 elif [[ $PTKFLAVOR == '4' ]]; then
     echo -e "Copy Powerlevel 10k Full config..."
-    curl https://clementine.fellipec.com/cs/p10k.zsh.full --output ~/.p10k.zsh
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.full --output ~/.p10k.zsh
 else
     echo -e "Copy Powerlevel 10k Black config..."
-    curl https://clementine.fellipec.com/cs/p10k.zsh.black --output ~/.p10k.zsh
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.black --output ~/.p10k.zsh
 fi
 
 echo -e "Install autofs?"
@@ -124,9 +124,7 @@ fi
 
 
 echo -e "\n"
-echo -e "========================"
-echo -e "Post-installation tasks:"
-echo -e "========================"
+echo -e "======================"
+echo -e "Instalation completed!"
+echo -e "======================"
 echo -e "\n"
-echo -e "    - Configure the MesloLGS font in your graphical terminal."
-echo -e "    - Set up your graphical terminal to use the default shell or /bin/usr/zsh."
