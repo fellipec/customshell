@@ -119,7 +119,7 @@ alias l='ls -CF'
 alias ls="lsd"
 alias bat="batcat --theme=Dracula"
 alias cat="batcat --paging=never --theme=Dracula"
-alias upd="sudo apt update && sudo apt upgrade -y"
+alias upd="sudo apt update && sudo apt upgrade"
 alias tracert="traceroute"
 
 # Alias definitions.

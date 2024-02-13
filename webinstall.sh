@@ -43,6 +43,16 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         curl https://clementine.fellipec.com/cs/sakura.conf --output ~/.config/sakura/sakura.conf
         sudo update-alternatives --set x-terminal-emulator /usr/bin/sakura
     fi
+
+    #Checks and install the Powerlevel10k recommended font
+    if ! [[ -e ~/.fonts/MesloLGS\ NF\ Regular.ttf ]]; then
+        echo -e "\n\nInstalling fonts..."
+        mkdir ~/.fonts
+        curl --retry 5 https://clementine.fellipec.com/cs/fonts.tar.gz | tar xz --directory=$HOME/.fonts
+        fc-cache
+    else
+        echo -e "\n\nFonts installed, skipping"
+    fi
 fi
 
 echo -e "\n\nBackuping current config..."
@@ -68,14 +78,6 @@ echo -e "\n\nDownloading new configuration..."
 curl https://clementine.fellipec.com/cs/zshrc --output ~/.zshrc
 curl https://clementine.fellipec.com/cs/bashrc --output ~/.bashrc
 
-if ! [[ -e ~/.fonts/MesloLGS\ NF\ Regular.ttf ]]; then
-    echo -e "\n\nInstalling fonts..."
-    mkdir ~/.fonts
-    curl --retry 5 https://clementine.fellipec.com/cs/fonts.tar.gz | tar xz --directory=$HOME/.fonts
-    fc-cache
-else
-    echo -e "\n\nFonts installed, skipping"
-fi
 
 
 if [[ $SHELL != '/usr/bin/zsh' ]]; then

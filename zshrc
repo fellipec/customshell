@@ -113,7 +113,7 @@ unsetopt no_match
 alias ls="lsd"
 alias bat="batcat --theme=Dracula"
 alias cat="batcat --paging=never --theme=Dracula"
-alias upd="sudo apt update && sudo apt upgrade -y"
+alias upd="sudo apt update && sudo apt upgrade"
 alias tracert="traceroute"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
