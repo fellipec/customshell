@@ -20,6 +20,16 @@ In addition it installs the following packages:
 - [Sakura](https://github.com/dabisu/sakura)
 - [GParted](https://gparted.org/)
 
+## Install
+
+To install this custom enviroment, copy and paste the following code on a terminal:
+
+`bash -c "$(curl -fsSL https://raw.githubusercontent.com/fellipec/customshell/main/webinstall.sh)"`
+
+or
+
+`bash -c "$(wget https://raw.githubusercontent.com/fellipec/customshell/main/webinstall.sh -O -)"`
+
 ## Backup
 
 Your original `.bashrc` and `.zshrc` files will be backuped with a `.bkp` extension
