@@ -117,6 +117,15 @@ if [[ $SHELL != '/usr/bin/zsh' ]]; then
     chsh -s $(which zsh)
 fi
 
+#Checks for the Euro sign € option
+#Remember to check when the eurosign:E (on 4h) gets implemented from freedesktop to 
+#change the appropriate file. 
+#For Wayland, needs to use the GUI.
+if ! [[ -e /etc/X11/xorg.conf.d/99-abnteuro.conf ]]; then
+    echo -e "\nInstalling € configuration"
+    sudo curl -L https://raw.githubusercontent.com/fellipec/customshell/main/99-abnteuro.conf --output /etc/X11/xorg.conf.d/99-abnteuro.conf
+fi
+
 #User selection of the Powerlevel10k theme. 
 echo -e "\n\nChoose the p10k config:\n"
 echo -e "    1) Black (default)"

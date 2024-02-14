@@ -44,6 +44,7 @@ Besides replacing the `.bashrc` and `.zshrc` with custom ones, the following con
 
 - The default shell is changed to `/usr/bin/zsh`
 - The default terminal is changed to Sakura
+- Add xkboption `eurosign:e` to X11
 - An alias redirect `ls` to `lsd`
 - An alias redirect `cat` to `bat`
 - An alias redirect `upd` to `sudo apt update && sudo apt upgrade`
