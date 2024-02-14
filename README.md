@@ -43,6 +43,7 @@ This script was written to be executed on **Debian Bookworm** or newer. When run
 Besides replacing the `.bashrc` and `.zshrc` with custom ones, the following configurations are changed in the system:
 
 - The default shell is changed to `/usr/bin/zsh`
+- The default terminal is changed to Sakura
 - An alias redirect `ls` to `lsd`
 - An alias redirect `cat` to `bat`
 - An alias redirect `upd` to `sudo apt update && sudo apt upgrade`
