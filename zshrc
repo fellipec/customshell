@@ -112,6 +112,10 @@ export AUTOENV_ENABLE_LEAVE="yes"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 unsetopt no_match
+
+#Create the .evn
+alias makenv="echo -e 'activator="".venv/bin/activate"" \nif [ -e ""$activator"" ]\nthen\n    source $activator\nfi' > .env && echo ""deactivate"" > .env.leave"
+
 alias cls="clear"
 alias ls="lsd"
 alias bat="batcat --theme=Dracula"
