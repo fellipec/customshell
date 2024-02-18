@@ -112,6 +112,7 @@ export AUTOENV_ENABLE_LEAVE="yes"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 unsetopt no_match
+alias cls="clear"
 alias ls="lsd"
 alias bat="batcat --theme=Dracula"
 alias cat="batcat --paging=never --theme=Dracula"
