@@ -126,6 +126,16 @@ if ! [[ -e /etc/X11/xorg.conf.d/99-abnteuro.conf ]]; then
     sudo curl -L https://raw.githubusercontent.com/fellipec/customshell/main/99-abnteuro.conf --output /etc/X11/xorg.conf.d/99-abnteuro.conf
 fi
 
+#Checks for autoenv and installs
+#Checks for Powerlevel10k and install if needed
+if ! [[ -e ~/.autoenv ]]; then
+    echo -e "\n\nInstalling autoenv..."
+    git clone 'https://github.com/hyperupcall/autoenv' ~/.autoenv
+else
+    echo -e "\n\nautoenv already installed, skipping..."
+fi
+
+
 #User selection of the Powerlevel10k theme. 
 echo -e "\n\nChoose the p10k config:\n"
 echo -e "    1) Black (default)"
