@@ -91,7 +91,7 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-Preferred editor for local and remote sessions
+#Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='nano'
 else
@@ -114,7 +114,7 @@ export AUTOENV_ENABLE_LEAVE="yes"
 unsetopt no_match
 
 #Create the .evn
-alias makenv="echo -e 'activator="".venv/bin/activate"" \nif [ -e ""$activator"" ]\nthen\n    source $activator\nfi' > .env && echo ""deactivate"" > .env.leave"
+alias makenv="echo -e 'if [ -e "".venv/bin/activate"" ]\nthen\n    source .venv/bin/activate\nfi' > .env && echo ""deactivate"" > .env.leave"
 
 alias cls="clear"
 alias ls="lsd"
