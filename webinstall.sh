@@ -80,8 +80,8 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     mkdir ~/.fonts
     curl --retry 5 -L https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.tar.xz | tar xJ --directory=$HOME/.fonts
     fc-cache
-    gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGSDZ Nerd Font 11'
-    gsettings set org.mate.interface monospace-font-name 'MesloLGSDZ Nerd Font 11'
+    gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGS Nerd Font 11'
+    gsettings set org.mate.interface monospace-font-name 'MesloLGS Nerd Font 11'
 
 fi
 
