@@ -174,6 +174,18 @@ else
     echo -e "Ignoring autofs install\n"
 fi
 
+#User selection to copy the Dracula theme
+echo -e "Install Dracula Theme?"
+
+read -p "y/[n]" INST_DRACULA
+
+if [[ $INST_DRACULA == 'y' ]]; then
+    cd $HOME
+    wget https://raw.githubusercontent.com/fellipec/customshell/main/draculatheme.tar.gz
+    tar -xzf draculatheme.tar.gz
+else
+    echo -e "Ignoring Dracula theme\n"
+fi
 
 echo -e "\n"
 echo -e "======================"
