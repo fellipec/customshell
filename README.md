@@ -19,6 +19,8 @@ In addition it installs the following packages:
 - [tldr-pages](https://github.com/tldr-pages/tldr)
 - [Sakura](https://github.com/dabisu/sakura)
 - [GParted](https://gparted.org/)
+- [Tela-circle-icons](https://github.com/vinceliuice/Tela-circle-icon-theme)
+- [Dracula GTK theme](https://github.com/dracula/gtk)
 
 ## Install
 

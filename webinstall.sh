@@ -159,31 +159,37 @@ else
     curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.black --output ~/.p10k.zsh
 fi
 
-#User selection to install autofs and configure to use /net folder. Also adds scarlett.lan to hosts for good measure
-echo -e "Install autofs?"
+# User selection to copy the Dracula theme
+if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
-read -p "y/[n]" INST_AUTOFS
+    echo -e "Install/Update Dracula Theme?"
+    read -p "y/[n]" INST_DRACULA
 
-if [[ $INST_AUTOFS == 'y' ]]; then
-    sudo apt install autofs
-    echo -e "/net    -hosts -fstype=nfs4,rw" | sudo tee -a /etc/auto.master
-    echo -e "192.168.100.1 scarlett.lan" | sudo tee -a /etc/hosts
-    sudo mkdir /net
-    sudo systemctl restart autofs.service
-else
-    echo -e "Ignoring autofs install\n"
-fi
-
-#User selection to copy the Dracula theme
-echo -e "Install Dracula Theme?"
-
-read -p "y/[n]" INST_DRACULA
-
-if [[ $INST_DRACULA == 'y' ]]; then
-    cd $HOME
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/draculatheme.tar.gz | tar -xzf -
-else
-    echo -e "Ignoring Dracula theme\n"
+    if [[ $INST_DRACULA == 'y' ]]; then
+        cd $HOME
+        if ! [[ -e ~/.icons ]]; then
+            mkdir .icons
+        fi
+        if ! [[ -e ~/.themes ]]; then
+            mkdir .themes
+        fi
+        cd $HOME/.themes
+        curl -L https://github.com/dracula/gtk/releases/latest/download/Dracula.tar.xz | tar -xJf -
+        cd $HOME/.icons
+        curl -L https://github.com/dracula/gtk/releases/latest/download/Dracula-cursors.tar.xz | tar -xJf -
+        git clone --depth 1 https://github.com/vinceliuice/Tela-circle-icon-theme.git
+        cd Tela-circle-icon-theme
+        ./install.sh -d $HOME/.icons dracula
+        cd ..
+        rm -r Tela-circle-icon-theme
+        gsettings set org.cinnamon.desktop.interface gtk-theme Dracula-slim-standard-buttons
+        gsettings set org.cinnamon.desktop.wm.preferences theme Dracula-slim-standard-buttons 
+        gsettings set org.cinnamon.desktop.interface cursor-theme Dracula-cursors
+        gsettings set org.cinnamon.theme name Dracula-slim-standard-buttons
+        gsettings set org.cinnamon.desktop.interface icon-theme Tela-circle-dracula
+    else
+        echo -e "Ignoring Dracula theme\n"
+    fi
 fi
 
 echo -e "\n"
