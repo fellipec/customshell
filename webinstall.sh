@@ -55,7 +55,7 @@ fi
 #Install the GUI apps only if in a x11 or wayland session
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     echo -e "\n\nSession ${XDG_SESSION_TYPE} detected, installing gui apps..."
-    INSTALL_PKGS_GUI="sakura gparted"
+    INSTALL_PKGS_GUI="sakura alacritty gparted"
     for i in $INSTALL_PKGS_GUI; do
         if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
             echo -e "\n Installing $i"
@@ -63,17 +63,31 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         fi
     done
 
-    #Download sakura configuration and make it the default terminal if it was installed
-    if [[ $(dpkg-query -W -f='${Status}' sakura 2>/dev/null | grep -c "ok installed") -eq 1 ]]; then 
-        echo -e "\n\nConfiguring Sakura terminal"
-        if ! [[ -e ~/.config/sakura ]]; then
-            mkdir ~/.config/sakura
-        fi
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/sakura.conf --output ~/.config/sakura/sakura.conf
-        sudo update-alternatives --set x-terminal-emulator /usr/bin/sakura
-        gsettings set org.cinnamon.desktop.default-applications.terminal exec 'sakura'
-
+    # Check if sakura or alacritty got installed and download
+    # the configuration and make it the default terminal if it was installed
+    if command -v sakura &> /dev/null
+        then
+            echo -e "\n\nConfiguring Sakura terminal"
+            if ! [[ -e ~/.config/sakura ]]; then
+                mkdir ~/.config/sakura
+            fi
+            curl -L https://raw.githubusercontent.com/fellipec/customshell/main/sakura.conf --output ~/.config/sakura/sakura.conf
+            sudo update-alternatives --set x-terminal-emulator /usr/bin/sakura
+            gsettings set org.cinnamon.desktop.default-applications.terminal exec 'sakura'
     fi
+
+    if command -v alacritty &> /dev/null
+        then
+            echo -e "\n\nConfiguring Alacritty terminal"
+            if ! [[ -e ~/.config/alacritty ]]; then
+                mkdir ~/.config/alacritty
+            fi
+            curl -L https://raw.githubusercontent.com/fellipec/customshell/main/alacritty.toml --output ~/.config/alacritty/alacritty.toml
+            sudo update-alternatives --set x-terminal-emulator /usr/bin/alacritty
+            gsettings set org.cinnamon.desktop.default-applications.terminal exec 'alacritty'
+    fi
+
+
 
     # Install or update the Powerlevel10k recommended font
     echo -e "\n\nInstalling fonts..."
