@@ -71,6 +71,8 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         fi
         curl -L https://raw.githubusercontent.com/fellipec/customshell/main/sakura.conf --output ~/.config/sakura/sakura.conf
         sudo update-alternatives --set x-terminal-emulator /usr/bin/sakura
+        gsettings set org.cinnamon.desktop.default-applications.terminal exec 'sakura'
+
     fi
 
     #Checks and install the Powerlevel10k recommended font
@@ -79,6 +81,8 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         mkdir ~/.fonts
         curl --retry 5 https://raw.githubusercontent.com/fellipec/customshell/main/fonts.tar.gz | tar xz --directory=$HOME/.fonts
         fc-cache
+        gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGS NF 10'
+        gsettings set org.mate.interface monospace-font-name 'MesloLGS NF 10'
     else
         echo -e "\n\nFonts installed, skipping"
     fi
