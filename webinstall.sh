@@ -181,8 +181,7 @@ read -p "y/[n]" INST_DRACULA
 
 if [[ $INST_DRACULA == 'y' ]]; then
     cd $HOME
-    wget https://raw.githubusercontent.com/fellipec/customshell/main/draculatheme.tar.gz
-    tar -xzf draculatheme.tar.gz
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/draculatheme.tar.gz | tar -xzf -
 else
     echo -e "Ignoring Dracula theme\n"
 fi
