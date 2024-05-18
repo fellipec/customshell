@@ -75,17 +75,14 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
     fi
 
-    #Checks and install the Powerlevel10k recommended font
-    if ! [[ -e ~/.fonts/MesloLGS\ NF\ Regular.ttf ]]; then
-        echo -e "\n\nInstalling fonts..."
-        mkdir ~/.fonts
-        curl --retry 5 https://raw.githubusercontent.com/fellipec/customshell/main/fonts.tar.gz | tar xz --directory=$HOME/.fonts
-        fc-cache
-        gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGS NF 10'
-        gsettings set org.mate.interface monospace-font-name 'MesloLGS NF 10'
-    else
-        echo -e "\n\nFonts installed, skipping"
-    fi
+    # Install or update the Powerlevel10k recommended font
+    echo -e "\n\nInstalling fonts..."
+    mkdir ~/.fonts
+    curl --retry 5 -L https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.tar.xz | tar xJ --directory=$HOME/.fonts
+    fc-cache
+    gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGSDZ Nerd Font 11'
+    gsettings set org.mate.interface monospace-font-name 'MesloLGSDZ Nerd Font 11'
+
 fi
 
 #Backups the current bashrc and zshrc

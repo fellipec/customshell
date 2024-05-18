@@ -21,6 +21,7 @@ In addition it installs the following packages:
 - [GParted](https://gparted.org/)
 - [Tela-circle-icons](https://github.com/vinceliuice/Tela-circle-icon-theme)
 - [Dracula GTK theme](https://github.com/dracula/gtk)
+- [Nerd Fonts Meslo](https://github.com/ryanoasis/nerd-fonts)
 
 ## Install
 
@@ -77,7 +78,5 @@ The install script will ask for your preferences for the Powerlevel10k theme. Th
 
 
 ## License
-
-This repository includes the beautiful [MesloLGS NF font](https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#meslo-nerd-font-patched-for-powerlevel10k) and it is released under the terms of [Apache License](https://raw.githubusercontent.com/romkatv/powerlevel10k-media/master/MesloLGS%20NF%20License.txt).
 
 Unless otherwise stated, this repository is licensed under the terms of the [GPL 2.0](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html).
