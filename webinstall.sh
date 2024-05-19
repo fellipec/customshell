@@ -54,7 +54,7 @@ if [[ $(dpkg-query -W -f='${Status}' tldr 2>/dev/null | grep -c "ok installed") 
     tldr --update
 fi
 
-#Install the GUI apps only if in a x11 or wayland session
+# Install the GUI apps only if in a x11 or wayland session
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     echo -e "\n\nSession ${XDG_SESSION_TYPE} detected, installing gui apps..."
     INSTALL_PKGS_GUI="sakura alacritty gparted"
@@ -67,6 +67,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
     # Check if sakura or alacritty got installed and download
     # the configuration and make it the default terminal if it was installed
+    # Alacritty is last because it's the prefered terminal application
     if command -v sakura &> /dev/null
         then
             echo -e "\n\nConfiguring Sakura terminal"
@@ -89,24 +90,23 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
             gsettings set org.cinnamon.desktop.default-applications.terminal exec 'alacritty'
     fi
 
-
-
     # Install or update the Powerlevel10k recommended font
     echo -e "\n\nInstalling fonts..."
-    mkdir ~/.fonts
+    if ! [[ -e ~/.fonts ]]; then
+        mkdir ~/.fonts
+    fi
     curl --retry 5 -L https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.tar.xz | tar xJ --directory=$HOME/.fonts
     fc-cache
     gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGS Nerd Font 11'
     gsettings set org.mate.interface monospace-font-name 'MesloLGS Nerd Font 11'
-
 fi
 
-#Backups the current bashrc and zshrc
+# Backups the current bashrc and zshrc
 echo -e "\n\nBackuping current config..."
 cp ~/.bashrc ~/.bashrc.bkp
 cp ~/.zshrc ~/.zshrc.bkp
 
-#Checks for oh-my-zsh and install if needed
+# Checks for oh-my-zsh and install if needed
 if ! [[ -e ~/.oh-my-zsh ]]; then
     echo -e "\n\nInstalling Oh My Zsh! \n Type exit after install is completed"
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -114,7 +114,7 @@ else
     echo -e "\nOh My Zsh already installed, skipping..."
 fi
 
-#Checks for Powerlevel10k and install if needed
+# Checks for Powerlevel10k and install if needed
 if ! [[ -e ~/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
     echo -e "\n\nInstalling Powerlevel10k..."
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -122,36 +122,33 @@ else
     echo -e "\n\nPowerlevel10k already installed, skipping..."
 fi
 
-#Download the custom configuration for ZSH and Powerlevel10k
+# Download the custom configuration for ZSH and Powerlevel10k
 echo -e "\n\nDownloading new configuration..."
 curl -L https://raw.githubusercontent.com/fellipec/customshell/main/zshrc --output ~/.zshrc
 curl -L https://raw.githubusercontent.com/fellipec/customshell/main/bashrc --output ~/.bashrc
 
-
-#Change the default shell to ZSH (If is not already)
+# Change the default shell to ZSH (If is not already)
 if [[ $SHELL != '/usr/bin/zsh' ]]; then
     echo -e "\n\nChanging the default shell to zsh..."
     chsh -s $(which zsh)
 fi
 
-#Checks for the Euro sign € option
-#Remember to check when the eurosign:E (on 4h) gets implemented from freedesktop to 
-#change the appropriate file. 
-#For Wayland, needs to use the GUI.
+# Checks for the Euro sign € option
+# Remember to check when the eurosign:E (on 4h) gets implemented from freedesktop to 
+# change the appropriate file. 
+# For Wayland, needs to use the GUI.
 if ! [[ -e /etc/X11/xorg.conf.d/99-abnteuro.conf ]]; then
     echo -e "\nInstalling € configuration"
     sudo curl -L https://raw.githubusercontent.com/fellipec/customshell/main/99-abnteuro.conf --output /etc/X11/xorg.conf.d/99-abnteuro.conf
 fi
 
-#Checks for autoenv and installs
-#Checks for Powerlevel10k and install if needed
+# Checks for autoenv and installs
 if ! [[ -e ~/.autoenv ]]; then
     echo -e "\n\nInstalling autoenv..."
     git clone 'https://github.com/hyperupcall/autoenv' ~/.autoenv
 else
     echo -e "\n\nautoenv already installed, skipping..."
 fi
-
 
 #User selection of the Powerlevel10k theme. 
 echo -e "\n\nChoose the p10k config:\n"
