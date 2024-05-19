@@ -21,7 +21,6 @@
 # - [GParted](https://gparted.org/)
 #
 # More information on https://github.com/fellipec/customshell
-#
 
 
 # Make sure the system is updated
@@ -221,3 +220,9 @@ echo -e "======================"
 echo -e "Instalation completed!"
 echo -e "======================"
 echo -e "\n"
+
+if ! command -v lsd &> /dev/null ; then
+    echo -e "\n"
+    echo -e "Your distro still don't have LSD available. Install manually from https://github.com/lsd-rs/lsd"
+fi
+
