@@ -202,6 +202,9 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         gsettings set org.cinnamon.desktop.interface cursor-theme Dracula-cursors
         gsettings set org.cinnamon.theme name Dracula-slim-standard-buttons
         gsettings set org.cinnamon.desktop.interface icon-theme Tela-circle-dracula
+        gsettings set org.cinnamon.desktop.keybindings.media-keys screensaver "['<Super>l', 'XF86ScreenSaver']"
+        gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>l']"
+        gsettings set org.cinnamon.desktop.keybindings looking-glass-keybinding "['<Primary><Alt>l']"
     else
         echo -e "Ignoring Dracula theme\n"
     fi
