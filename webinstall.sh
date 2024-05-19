@@ -24,7 +24,7 @@
 #
 
 
-#Make sure the system is updated
+# Make sure the system is updated
 echo -e "================================="
 echo -e "Configuring the custom enviroment"
 echo -e "================================="
@@ -33,7 +33,7 @@ sudo apt update
 sudo apt upgrade
 sudo apt autoremove
 
-#Install the packages that work on CLI
+# Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
 INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions command-not-found byobu lsd bat duf htop btop wget curl git tldr"
 for i in $INSTALL_PKGS; do
@@ -42,11 +42,13 @@ for i in $INSTALL_PKGS; do
         sudo apt-get install -y $i
     fi
 done
-#yt-dlp from the repos are not always update
+
+# yt-dlp from the repos is always an ancient version. Install the version from the repo that is up-to-date
 echo -e "\nInstalling/updating yt-dlp..."
 sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp --output /usr/local/bin/yt-dlp
+sudo chmod +x /usr/loca/bin/yt-dlp
 
-#before tldr can be used, it needs to be updated
+# before tldr can be used, it needs to be updated
 if [[ $(dpkg-query -W -f='${Status}' tldr 2>/dev/null | grep -c "ok installed") -eq 1 ]]; then 
     echo -e "\nUpdating tldr..."
     tldr --update
@@ -205,6 +207,13 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         gsettings set org.cinnamon.desktop.keybindings.media-keys screensaver "['<Super>l', 'XF86ScreenSaver']"
         gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>l']"
         gsettings set org.cinnamon.desktop.keybindings looking-glass-keybinding "['<Primary><Alt>l']"
+        if command -v flatpak &> /dev/null ; then
+            sudo flatpak override --filesystem=$HOME/.themes
+            sudo flatpak override --filesystem=$HOME/.icons
+            sudo flatpak override --env=GTK_THEME=Dracula-slim-standard-buttons
+            sudo flatpak override --env=ICON_THEME=Tela-circle-dracula
+        fi
+
     else
         echo -e "Ignoring Dracula theme\n"
     fi
