@@ -45,7 +45,7 @@ done
 # yt-dlp from the repos is always an ancient version. Install the version from the repo that is up-to-date
 echo -e "\nInstalling/updating yt-dlp..."
 sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp --output /usr/local/bin/yt-dlp
-sudo chmod +x /usr/loca/bin/yt-dlp
+sudo chmod +x /usr/local/bin/yt-dlp
 
 # before tldr can be used, it needs to be updated
 if [[ $(dpkg-query -W -f='${Status}' tldr 2>/dev/null | grep -c "ok installed") -eq 1 ]]; then 
