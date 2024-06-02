@@ -34,7 +34,7 @@ sudo apt autoremove
 
 # Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
-INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions command-not-found byobu lsd bat duf htop btop wget curl git tldr"
+INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br"
 for i in $INSTALL_PKGS; do
     if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
         echo -e "\n Installing $i"
@@ -121,10 +121,11 @@ else
     echo -e "\n\nPowerlevel10k already installed, skipping..."
 fi
 
-# Download the custom configuration for ZSH and Powerlevel10k
+# Download the custom configuration for ZSH and Powerlevel10k, and nano
 echo -e "\n\nDownloading new configuration..."
 curl -L https://raw.githubusercontent.com/fellipec/customshell/main/zshrc --output ~/.zshrc
 curl -L https://raw.githubusercontent.com/fellipec/customshell/main/bashrc --output ~/.bashrc
+curl -L https://raw.githubusercontent.com/fellipec/customshell/main/nanorc --output ~/.nanorc
 
 # Change the default shell to ZSH (If is not already)
 if [[ $SHELL != '/usr/bin/zsh' ]]; then
