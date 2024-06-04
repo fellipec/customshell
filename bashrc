@@ -116,11 +116,14 @@ alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
 
+alias cls="clear"
 alias ls="lsd"
 alias bat="batcat --theme=Dracula"
 alias cat="batcat --paging=never --theme=Dracula"
 alias upd="sudo apt update && sudo apt upgrade"
 alias tracert="traceroute"
+alias ping="ping -O"
+alias catlog="cat -l log"
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like

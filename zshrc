@@ -122,6 +122,8 @@ alias bat="batcat --theme=Dracula"
 alias cat="batcat --paging=never --theme=Dracula"
 alias upd="sudo apt update && sudo apt upgrade"
 alias tracert="traceroute"
+alias ping="ping -O"
+alias catlog="cat -l log"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
