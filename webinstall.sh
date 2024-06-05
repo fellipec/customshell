@@ -34,7 +34,7 @@ sudo apt autoremove
 
 # Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
-INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br"
+INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync"
 for i in $INSTALL_PKGS; do
     if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
         echo -e "\n Installing $i"
@@ -215,6 +215,73 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         echo -e "Ignoring Dracula theme\n"
     fi
 fi
+
+
+#User selection of /tmp to be on RAM
+echo -e "\n\nConfigure /tmp to RAM?:\n"
+read -p "[y/N]: " TMPR
+
+if [[ $TMPR == 'y' ]]; then
+    sudo cp /usr/share/systemd/tmp.mount /etc/systemd/system
+    sudo sytemctl enable tmp.mount
+fi
+
+# User selection of journalctl to be volatile
+echo -e "\n\nConfigure journalctl to Volatile?:\n"
+read -p "[y/N]: " JCTLV
+
+if [[ $JCTLV == 'y' ]]; then
+
+    FILE="/etc/systemd/journald.conf"
+
+    # Check if any line starts with "Storage"
+    if ! grep -q "^Storage" "$FILE"; then
+        # If no such line exists, append "Storage=volatile"
+        echo "Storage=volatile" | sudo tee -a "$FILE"
+        echo "Added 'Storage=volatile' to $FILE"
+    else
+        echo "Already have Storage config $FILE. Will do nothing"
+    fi
+
+    # Optionally install log2ram 
+    echo -e "\n\nInstall log2ram?:\n"
+    read -p "[y/N]: " ILTR
+
+    if [[ $ILTR == 'y' ]]; then
+
+        curl -L https://github.com/azlux/log2ram/archive/master.tar.gz | tar zxf -
+        cd log2ram-master
+        chmod +x install.sh && sudo ./install.sh
+        cd ..
+        rm -r log2ram-master
+
+        sudo curl -L https://raw.githubusercontent.com/fellipec/customshell/main/log2ram.conf --output /etc/log2ram.conf
+
+        # Path to the log2ram config file
+        CONFIG_FILE="/etc/log2ram.conf"
+        # Get the total system RAM in MB
+        TOTAL_RAM=$(free -m | awk '/^Mem/{print $2}')
+
+        # Calculate SIZE as 15% of total RAM
+        SIZE=$(echo "scale=0; $TOTAL_RAM * 0.15 / 1" | bc)
+
+        # Calculate LOG_DISK_SIZE as 2.5 times SIZE
+        LOG_DISK_SIZE=$(echo "scale=0; $SIZE * 2.5 / 1" | bc)
+
+        # Update the config file
+        sed -i "s/^SIZE=.*/SIZE=${SIZE}/" "$CONFIG_FILE"
+        sed -i "s/^LOG_DISK_SIZE=.*/LOG_DISK_SIZE=${LOG_DISK_SIZE}/" "$CONFIG_FILE"
+        sed -i "s/^MAIL=.*/MAIL=false/" "$CONFIG_FILE"
+        sed -i "s/^ZL2R=.*/ZL2R=true/" "$CONFIG_FILE"
+
+        echo "Updated $CONFIG_FILE:"
+        echo "SIZE=$SIZE"
+        echo "LOG_DISK_SIZE=$LOG_DISK_SIZE"
+
+    fi
+
+fi 
+
 
 echo -e "\n"
 echo -e "======================"
