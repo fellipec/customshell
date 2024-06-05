@@ -22,10 +22,11 @@ In addition it installs the following packages:
 - [Tela-circle-icons](https://github.com/vinceliuice/Tela-circle-icon-theme)
 - [Dracula GTK theme](https://github.com/dracula/gtk)
 - [Nerd Fonts Meslo](https://github.com/ryanoasis/nerd-fonts)
+- [Log2ram](https://github.com/azlux/log2ram)
 
 ## Install
 
-To install this custom enviroment, copy and paste the following code on a terminal:
+To install this custom environment, copy and paste the following code on a terminal:
 
 `bash -c "$(curl -fsSL https://raw.githubusercontent.com/fellipec/customshell/main/webinstall.sh)"`
 
@@ -35,7 +36,7 @@ or
 
 ## Backup
 
-Your original `.bashrc` and `.zshrc` files will be backuped with a `.bkp` extension
+Your original `.bashrc` and `.zshrc` files will be backed up with a `.bkp` extension
 
 ## Compatibility
 

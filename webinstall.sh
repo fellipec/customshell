@@ -269,10 +269,10 @@ if [[ $JCTLV == 'y' ]]; then
         LOG_DISK_SIZE=$(echo "scale=0; $SIZE * 2.5 / 1" | bc)
 
         # Update the config file
-        sed -i "s/^SIZE=.*/SIZE=${SIZE}/" "$CONFIG_FILE"
-        sed -i "s/^LOG_DISK_SIZE=.*/LOG_DISK_SIZE=${LOG_DISK_SIZE}/" "$CONFIG_FILE"
-        sed -i "s/^MAIL=.*/MAIL=false/" "$CONFIG_FILE"
-        sed -i "s/^ZL2R=.*/ZL2R=true/" "$CONFIG_FILE"
+        sudo sed -i "s/^SIZE=.*/SIZE=${SIZE}/" "$CONFIG_FILE"
+        sudo sed -i "s/^LOG_DISK_SIZE=.*/LOG_DISK_SIZE=${LOG_DISK_SIZE}/" "$CONFIG_FILE"
+        sudo sed -i "s/^MAIL=.*/MAIL=false/" "$CONFIG_FILE"
+        sudo sed -i "s/^ZL2R=.*/ZL2R=true/" "$CONFIG_FILE"
 
         echo "Updated $CONFIG_FILE:"
         echo "SIZE=$SIZE"
