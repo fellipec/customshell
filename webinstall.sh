@@ -248,6 +248,8 @@ if [[ $JCTLV == 'y' ]]; then
     read -p "[y/N]: " ILTR
 
     if [[ $ILTR == 'y' ]]; then
+        sudo journalctl --vacuum-size=100M
+        sudo rm "/var/log/*.gz"
 
         curl -L https://github.com/azlux/log2ram/archive/master.tar.gz | tar zxf -
         cd log2ram-master
@@ -267,6 +269,9 @@ if [[ $JCTLV == 'y' ]]; then
 
         # Calculate LOG_DISK_SIZE as 2.5 times SIZE
         LOG_DISK_SIZE=$(echo "scale=0; $SIZE * 2.5 / 1" | bc)
+
+        SIZE="${SIZE}M"
+        LOG_DISK_SIZE="${LOG_DISK_SIZE}M"
 
         # Update the config file
         sudo sed -i "s/^SIZE=.*/SIZE=${SIZE}/" "$CONFIG_FILE"
