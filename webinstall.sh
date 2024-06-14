@@ -34,7 +34,7 @@ sudo apt autoremove
 
 # Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
-INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync"
+INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions zsh-syntax-highlighting command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf"
 for i in $INSTALL_PKGS; do
     if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
         echo -e "\n Installing $i"
@@ -142,24 +142,33 @@ if ! [[ -e /etc/X11/xorg.conf.d/99-abnteuro.conf ]]; then
     sudo curl -L https://raw.githubusercontent.com/fellipec/customshell/main/99-abnteuro.conf --output /etc/X11/xorg.conf.d/99-abnteuro.conf
 fi
 
+
+# Installs zoxide
+curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
+# Decided to stop using autoenv in 06/2024
 # Checks for autoenv and installs
-if ! [[ -e ~/.autoenv ]]; then
-    echo -e "\n\nInstalling autoenv..."
-    git clone 'https://github.com/hyperupcall/autoenv' ~/.autoenv
-else
-    echo -e "\n\nautoenv already installed, skipping..."
-fi
+#if ! [[ -e ~/.autoenv ]]; then
+#    echo -e "\n\nInstalling autoenv..."
+#    git clone 'https://github.com/hyperupcall/autoenv' ~/.autoenv
+#else
+#    echo -e "\n\nautoenv already installed, skipping..."
+#fi
 
 #User selection of the Powerlevel10k theme. 
 echo -e "\n\nChoose the p10k config:\n"
-echo -e "    1) Black (default)"
+echo -e "    0) Don't change (defaut)"
+echo -e "    1) Black"
 echo -e "    2) Color"
 echo -e "    3) Laptop"
 echo -e "    4) Full"
 
 read -p "Pick an option: " PTKFLAVOR
 
-if [[ $PTKFLAVOR == '2' ]]; then
+if [[ $PTKFLAVOR == '1' ]]; then
+    echo -e "Copy Powerlevel 10k Black config..."
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.black --output ~/.p10k.zsh
+elif [[ $PTKFLAVOR == '2' ]]; then
     echo -e "Copy Powerlevel 10k Color config..."
     curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.color --output ~/.p10k.zsh
 elif [[ $PTKFLAVOR == '3' ]]; then
@@ -169,8 +178,7 @@ elif [[ $PTKFLAVOR == '4' ]]; then
     echo -e "Copy Powerlevel 10k Full config..."
     curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.full --output ~/.p10k.zsh
 else
-    echo -e "Copy Powerlevel 10k Black config..."
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.black --output ~/.p10k.zsh
+    echo -e "Don't touch the p10k theme"
 fi
 
 # User selection to copy the Dracula theme

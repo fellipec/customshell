@@ -5,10 +5,15 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=/usr/local/bin:$PATH
+
+if [ -d "$HOME/.local/bin" ]; then
+    export PATH="$HOME/.local/bin:$PATH"
+fi
 
 export HISTCONTROL="ignoreboth:erasedups"
 export HISTIGNORE='clear:ls'
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=30
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -80,7 +85,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git debian systemd command-not-found colorize colored-man-pages vscode extract autoenv)
+plugins=(git debian systemd command-not-found colorize colored-man-pages vscode extract)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -98,7 +103,8 @@ else
   export EDITOR='nano'
 fi
 
-export AUTOENV_ENABLE_LEAVE="yes"
+# Decided to stop using autoenv in 06/2024
+#export AUTOENV_ENABLE_LEAVE="yes"
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -113,8 +119,13 @@ export AUTOENV_ENABLE_LEAVE="yes"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 unsetopt no_match
 
-#Create the .evn
-alias makenv="echo -e 'if [ -e "".venv/bin/activate"" ]\nthen\n    source .venv/bin/activate\nfi' > .env && echo ""deactivate"" > .env.leave"
+# Decided to stop using autoenv in 06/2024
+# Create the .evn
+# alias makenv="echo -e 'if [ -e "".venv/bin/activate"" ]\nthen\n    source .venv/bin/activate\nfi' > .env && echo ""deactivate"" > .env.leave"
+
+#Enable Debian Plugins
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 alias cls="clear"
 alias ls="lsd"
@@ -124,6 +135,7 @@ alias upd="sudo apt update && sudo apt upgrade"
 alias tracert="traceroute"
 alias ping="ping -O"
 alias catlog="cat -l log"
+eval "$(zoxide init zsh --cmd cd)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
