@@ -231,7 +231,7 @@ read -p "[y/N]: " TMPR
 
 if [[ $TMPR == 'y' ]]; then
     sudo cp /usr/share/systemd/tmp.mount /etc/systemd/system
-    sudo sytemctl enable tmp.mount
+    sudo systemctl enable tmp.mount
 fi
 
 # User selection of journalctl to be volatile
