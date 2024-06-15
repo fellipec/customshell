@@ -6,23 +6,26 @@ In addition it installs the following packages:
 - [ZSH](https://www.zsh.org/)
   - [Oh My Zsh](https://ohmyz.sh/)
   - [Powerlevel10k](https://github.com/romkatv/powerlevel10k)
-- [Command-not-found](https://tracker.debian.org/pkg/command-not-found)
-- [Byobu](https://www.byobu.org/)
-- [LSDeluxe](https://github.com/lsd-rs/lsd)
+  - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
+  - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting/)
+- [Aspell](http://aspell.net/)
 - [Bat](https://github.com/sharkdp/bat)
-- [Duf](https://github.com/muesli/duf)
-- [Htop](https://htop.dev/)
 - [Btop](https://github.com/aristocratos/btop)
-- [Wget](https://www.gnu.org/software/wget/)
+- [Byobu](https://www.byobu.org/)
+- [Command-not-found](https://tracker.debian.org/pkg/command-not-found)
 - [cURL](https://curl.se/)
+- [Duf](https://github.com/muesli/duf)
+- [fdfind](https://github.com/sharkdp/fd)
+- [fzf](https://github.com/junegunn/fzf)
 - [Git](https://git-scm.com/)
-- [tldr-pages](https://github.com/tldr-pages/tldr)
-- [Sakura](https://github.com/dabisu/sakura)
 - [GParted](https://gparted.org/)
-- [Tela-circle-icons](https://github.com/vinceliuice/Tela-circle-icon-theme)
-- [Dracula GTK theme](https://github.com/dracula/gtk)
-- [Nerd Fonts Meslo](https://github.com/ryanoasis/nerd-fonts)
-- [Log2ram](https://github.com/azlux/log2ram)
+- [Htop](https://htop.dev/)
+- [LSDeluxe](https://github.com/lsd-rs/lsd)
+- [rsync](https://github.com/RsyncProject/rsync)
+- [Sakura](https://github.com/dabisu/sakura)
+- [tldr-pages](https://github.com/tldr-pages/tldr)
+- [Wget](https://www.gnu.org/software/wget/)
+- [zoxide](https://github.com/ajeetdsouza/zoxide)
 
 ## Install
 
@@ -40,7 +43,7 @@ Your original `.bashrc` and `.zshrc` files will be backed up with a `.bkp` exten
 
 ## Compatibility
 
-This script was written to be executed on **Debian Bookworm** or newer. When running on Debian derivatives distros, check if all the packages could be installed.
+This script was written to be executed on **Debian Bookworm** or newer. When running on Debian derivatives distros, check if all the packages could be installed. It's tested with Linux Mint 21.3 too.
 
 ## Configuration changes:
 

@@ -36,7 +36,7 @@ ZSH_THEME=powerlevel10k/powerlevel10k
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+HYPHEN_INSENSITIVE="true"
 
 # Uncomment one of the following lines to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
@@ -103,12 +103,6 @@ else
   export EDITOR='nano'
 fi
 
-# Decided to stop using autoenv in 06/2024
-#export AUTOENV_ENABLE_LEAVE="yes"
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -117,11 +111,9 @@ fi
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-unsetopt no_match
 
-# Decided to stop using autoenv in 06/2024
-# Create the .evn
-# alias makenv="echo -e 'if [ -e "".venv/bin/activate"" ]\nthen\n    source .venv/bin/activate\nfi' > .env && echo ""deactivate"" > .env.leave"
+# Disable globbing when there are no matches (It's annoying otherwise)
+unsetopt no_match
 
 #Enable Debian Plugins
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

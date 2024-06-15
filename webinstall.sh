@@ -6,19 +6,26 @@
 # - [ZSH](https://www.zsh.org/)
 #   - [Oh My Zsh](https://ohmyz.sh/)
 #   - [Powerlevel10k](https://github.com/romkatv/powerlevel10k)
-# - [Command-not-found](https://tracker.debian.org/pkg/command-not-found)
-# - [Byobu](https://www.byobu.org/)
-# - [LSDeluxe](https://github.com/lsd-rs/lsd)
+#   - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
+#   - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting/)
+# - [Aspell](http://aspell.net/)
 # - [Bat](https://github.com/sharkdp/bat)
-# - [Duf](https://github.com/muesli/duf)
-# - [Htop](https://htop.dev/)
 # - [Btop](https://github.com/aristocratos/btop)
-# - [Wget](https://www.gnu.org/software/wget/)
+# - [Byobu](https://www.byobu.org/)
+# - [Command-not-found](https://tracker.debian.org/pkg/command-not-found)
 # - [cURL](https://curl.se/)
+# - [Duf](https://github.com/muesli/duf)
+# - [fdfind](https://github.com/sharkdp/fd)
+# - [fzf](https://github.com/junegunn/fzf)
 # - [Git](https://git-scm.com/)
-# - [tldr-pages](https://github.com/tldr-pages/tldr)
-# - [Sakura](https://github.com/dabisu/sakura)
 # - [GParted](https://gparted.org/)
+# - [Htop](https://htop.dev/)
+# - [LSDeluxe](https://github.com/lsd-rs/lsd)
+# - [rsync](https://github.com/RsyncProject/rsync)
+# - [Sakura](https://github.com/dabisu/sakura)
+# - [tldr-pages](https://github.com/tldr-pages/tldr)
+# - [Wget](https://www.gnu.org/software/wget/)
+# - [zoxide](https://github.com/ajeetdsouza/zoxide)
 #
 # More information on https://github.com/fellipec/customshell
 
@@ -34,7 +41,7 @@ sudo apt autoremove
 
 # Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
-INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions zsh-syntax-highlighting command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf"
+INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf fdfind"
 for i in $INSTALL_PKGS; do
     if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
         echo -e "\n Installing $i"
@@ -52,6 +59,8 @@ if [[ $(dpkg-query -W -f='${Status}' tldr 2>/dev/null | grep -c "ok installed") 
     echo -e "\nUpdating tldr..."
     tldr --update
 fi
+
+
 
 # Install the GUI apps only if in a x11 or wayland session
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
@@ -98,87 +107,100 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     fc-cache
     gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGS Nerd Font 11'
     gsettings set org.mate.interface monospace-font-name 'MesloLGS Nerd Font 11'
+
+    # Checks for the Euro sign € option
+    # Remember to check when the eurosign:E (on 4h) gets implemented from freedesktop to 
+    # change the appropriate file. 
+    # For Wayland, needs to use the GUI.
+    if ! [[ -e /etc/X11/xorg.conf.d/99-abnteuro.conf ]]; then
+        echo -e "\nInstalling € configuration"
+        sudo curl -L https://raw.githubusercontent.com/fellipec/customshell/main/99-abnteuro.conf --output /etc/X11/xorg.conf.d/99-abnteuro.conf
+    fi
 fi
+
+# Installs zoxide
+curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
 # Backups the current bashrc and zshrc
 echo -e "\n\nBackuping current config..."
 cp ~/.bashrc ~/.bashrc.bkp
 cp ~/.zshrc ~/.zshrc.bkp
 
-# Checks for oh-my-zsh and install if needed
-if ! [[ -e ~/.oh-my-zsh ]]; then
-    echo -e "\n\nInstalling Oh My Zsh! \n Type exit after install is completed"
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-else
-    echo -e "\nOh My Zsh already installed, skipping..."
-fi
+#User selection of shell
+echo -e "\n\nInstall and configure zsh and oh my zsh?:\n"
+read -p "[y/N]: " ZSHELL
 
-# Checks for Powerlevel10k and install if needed
-if ! [[ -e ~/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
-    echo -e "\n\nInstalling Powerlevel10k..."
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-else
-    echo -e "\n\nPowerlevel10k already installed, skipping..."
-fi
+if [[ $ZSHELL == 'y' ]]; then
 
-# Download the custom configuration for ZSH and Powerlevel10k, and nano
-echo -e "\n\nDownloading new configuration..."
-curl -L https://raw.githubusercontent.com/fellipec/customshell/main/zshrc --output ~/.zshrc
-curl -L https://raw.githubusercontent.com/fellipec/customshell/main/bashrc --output ~/.bashrc
-curl -L https://raw.githubusercontent.com/fellipec/customshell/main/nanorc --output ~/.nanorc
+    echo -e "\n\nInstalling packages..."
+    INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions zsh-syntax-highlighting"
+    for i in $INSTALL_PKGS; do
+        if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
+            echo -e "\n Installing $i"
+            sudo apt-get install -y $i
+        fi
+    done
 
-# Change the default shell to ZSH (If is not already)
-if [[ $SHELL != '/usr/bin/zsh' ]]; then
-    echo -e "\n\nChanging the default shell to zsh..."
-    chsh -s $(which zsh)
-fi
+    # Checks for oh-my-zsh and install if needed
+    if ! [[ -e ~/.oh-my-zsh ]]; then
+        echo -e "\n\nInstalling Oh My Zsh! \n Type exit after install is completed"
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    else
+        echo -e "\nOh My Zsh already installed, skipping..."
+    fi
 
-# Checks for the Euro sign € option
-# Remember to check when the eurosign:E (on 4h) gets implemented from freedesktop to 
-# change the appropriate file. 
-# For Wayland, needs to use the GUI.
-if ! [[ -e /etc/X11/xorg.conf.d/99-abnteuro.conf ]]; then
-    echo -e "\nInstalling € configuration"
-    sudo curl -L https://raw.githubusercontent.com/fellipec/customshell/main/99-abnteuro.conf --output /etc/X11/xorg.conf.d/99-abnteuro.conf
-fi
+    # Checks for Powerlevel10k and install if needed
+    if ! [[ -e ~/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
+        echo -e "\n\nInstalling Powerlevel10k..."
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    else
+        echo -e "\n\nPowerlevel10k already installed, skipping..."
+    fi
 
 
-# Installs zoxide
-curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+    # Download the custom configuration for ZSH and Powerlevel10k, and nano
+    echo -e "\n\nDownloading new configuration..."
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/zshrc --output ~/.zshrc
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/bashrc --output ~/.bashrc
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/nanorc --output ~/.nanorc
 
-# Decided to stop using autoenv in 06/2024
-# Checks for autoenv and installs
-#if ! [[ -e ~/.autoenv ]]; then
-#    echo -e "\n\nInstalling autoenv..."
-#    git clone 'https://github.com/hyperupcall/autoenv' ~/.autoenv
-#else
-#    echo -e "\n\nautoenv already installed, skipping..."
-#fi
+    # Change the default shell to ZSH (If is not already)
+    if [[ $SHELL != '/usr/bin/zsh' ]]; then
+        echo -e "\n\nChanging the default shell to zsh..."
+        chsh -s $(which zsh)
+    fi
 
-#User selection of the Powerlevel10k theme. 
-echo -e "\n\nChoose the p10k config:\n"
-echo -e "    0) Don't change (defaut)"
-echo -e "    1) Black"
-echo -e "    2) Color"
-echo -e "    3) Laptop"
-echo -e "    4) Full"
+    #User selection of the Powerlevel10k theme. 
+    echo -e "\n\nChoose the p10k config:\n"
+    echo -e "    0) Don't change (defaut)"
+    echo -e "    1) Black"
+    echo -e "    2) Color"
+    echo -e "    3) Laptop"
+    echo -e "    4) Full"
+    echo -e "    5) Simple"
 
-read -p "Pick an option: " PTKFLAVOR
+    read -p "Pick an option: " PTKFLAVOR
 
-if [[ $PTKFLAVOR == '1' ]]; then
-    echo -e "Copy Powerlevel 10k Black config..."
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.black --output ~/.p10k.zsh
-elif [[ $PTKFLAVOR == '2' ]]; then
-    echo -e "Copy Powerlevel 10k Color config..."
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.color --output ~/.p10k.zsh
-elif [[ $PTKFLAVOR == '3' ]]; then
-    echo -e "Copy Powerlevel 10k Laptop config..."
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.laptop --output ~/.p10k.zsh
-elif [[ $PTKFLAVOR == '4' ]]; then
-    echo -e "Copy Powerlevel 10k Full config..."
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.full --output ~/.p10k.zsh
-else
-    echo -e "Don't touch the p10k theme"
+    if [[ $PTKFLAVOR == '1' ]]; then
+        echo -e "Copy Powerlevel 10k Black config..."
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.black --output ~/.p10k.zsh
+    elif [[ $PTKFLAVOR == '2' ]]; then
+        echo -e "Copy Powerlevel 10k Color config..."
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.color --output ~/.p10k.zsh
+    elif [[ $PTKFLAVOR == '3' ]]; then
+        echo -e "Copy Powerlevel 10k Laptop config..."
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.laptop --output ~/.p10k.zsh
+    elif [[ $PTKFLAVOR == '4' ]]; then
+        echo -e "Copy Powerlevel 10k Full config..."
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.full --output ~/.p10k.zsh
+    elif [[ $PTKFLAVOR == '5' ]]; then
+        echo -e "Copy Powerlevel 10k Simple config..."
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.simple --output ~/.p10k.zsh
+        sed -i 's/alias ls="lsd"/alias ls="lsd --icon never"/' .zshrc
+    else
+        echo -e "Don't touch the p10k theme"
+    fi
+
 fi
 
 # User selection to copy the Dracula theme

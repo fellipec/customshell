@@ -145,4 +145,5 @@ if ! shopt -oq posix; then
   fi
 fi
 
+eval "$(zoxide init bash)"
 
