@@ -207,11 +207,11 @@ colors:
     cursor: '#f8f8f2'
 
   Vi_mode_cursor:
-    text = 'CellBackground'
-    cursor = 'CellForeground'
+    text = CellBackground
+    cursor = CellForeground
 
   selection:
-    text = 'CellForeground'
+    text = CellForeground
     background = '#44475a'
 
   normal:
