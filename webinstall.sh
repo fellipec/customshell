@@ -93,7 +93,24 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
             if ! [[ -e ~/.config/alacritty ]]; then
                 mkdir ~/.config/alacritty
             fi
-            curl -L https://raw.githubusercontent.com/fellipec/customshell/main/alacritty.toml --output ~/.config/alacritty/alacritty.toml
+            # Get Alacritty version
+            # Older versions of Alacritty that ships with Debian up to Trixie use yml config
+            # Newer versions user toml config
+            VERSION=$(alacritty --version | awk '{print $2}')
+            # Function to compare versions
+            version_ge() {
+                [[ "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1" ]]
+            }
+            # Commands to run
+            COMMAND_IF_GE="curl -L https://raw.githubusercontent.com/fellipec/customshell/main/alacritty.toml --output ~/.config/alacritty/alacritty.toml"
+            COMMAND_IF_LT="curl -L https://raw.githubusercontent.com/fellipec/customshell/main/alacritty.yml --output ~/.config/alacritty/alacritty.yml"
+
+            # Compare versions and run the appropriate command
+            if version_ge "$VERSION" "0.13"; then
+                eval "$COMMAND_IF_GE"
+            else
+                eval "$COMMAND_IF_LT"
+            fi
             sudo update-alternatives --set x-terminal-emulator /usr/bin/alacritty
             gsettings set org.cinnamon.desktop.default-applications.terminal exec 'alacritty'
     fi
