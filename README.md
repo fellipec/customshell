@@ -46,7 +46,7 @@ Your original `.bashrc` and `.zshrc` files will be backed up with a `.bkp` exten
 
 ## Compatibility
 
-This script was written to be executed on **Debian Bookworm** or newer. When running on Debian derivatives distros, check if all the packages could be installed. It's tested with **Linux Mint 21.3** too.
+This script was written to be executed on **Debian Bookworm** or newer. When running on Debian derivatives distros, check if all the packages could be installed. It's tested with **Linux Mint 21.3** and partially on **LMDE 6** too.
 
 ## Configuration changes:
 
