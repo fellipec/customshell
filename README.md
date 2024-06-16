@@ -46,14 +46,16 @@ Your original `.bashrc` and `.zshrc` files will be backed up with a `.bkp` exten
 
 ## Compatibility
 
-This script was written to be executed on **Debian Bookworm** or newer. When running on Debian derivatives distros, check if all the packages could be installed. It's tested with Linux Mint 21.3 too.
+This script was written to be executed on **Debian Bookworm** or newer. When running on Debian derivatives distros, check if all the packages could be installed. It's tested with **Linux Mint 21.3** too.
 
 ## Configuration changes:
 
 Besides replacing the `.bashrc` and `.zshrc` with custom ones, the following configurations are changed in the system:
 
 - The default shell is changed to `/usr/bin/zsh`
-- The default terminal is changed to Sakura
+- Oh My Zsh! is installed and with P10K Theme and some other convenience features
+- Neovim installed with kickstart
+- The default terminal is changed to Alacritty or Sakura if the former is not available
 - Add xkboption `eurosign:e` to X11
 - An alias redirect `ls` to `lsd`
 - An alias redirect `cat` to `bat`
