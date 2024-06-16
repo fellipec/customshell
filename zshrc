@@ -98,9 +98,9 @@ source $ZSH/oh-my-zsh.sh
 
 #Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nano'
+  export EDITOR='nvim'
 else
-  export EDITOR='nano'
+  export EDITOR='nvim'
 fi
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,

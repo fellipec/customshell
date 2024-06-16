@@ -1,34 +1,9 @@
 #!/bin/bash
 
-# This script installs a custom enviroment based on the ZSH Shell. 
-# In addition it installs the following packages:
-
-# - [ZSH](https://www.zsh.org/)
-#   - [Oh My Zsh](https://ohmyz.sh/)
-#   - [Powerlevel10k](https://github.com/romkatv/powerlevel10k)
-#   - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
-#   - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting/)
-# - [Aspell](http://aspell.net/)
-# - [Bat](https://github.com/sharkdp/bat)
-# - [Btop](https://github.com/aristocratos/btop)
-# - [Byobu](https://www.byobu.org/)
-# - [Command-not-found](https://tracker.debian.org/pkg/command-not-found)
-# - [cURL](https://curl.se/)
-# - [Duf](https://github.com/muesli/duf)
-# - [fdfind](https://github.com/sharkdp/fd)
-# - [fzf](https://github.com/junegunn/fzf)
-# - [Git](https://git-scm.com/)
-# - [GParted](https://gparted.org/)
-# - [Htop](https://htop.dev/)
-# - [LSDeluxe](https://github.com/lsd-rs/lsd)
-# - [rsync](https://github.com/RsyncProject/rsync)
-# - [Sakura](https://github.com/dabisu/sakura)
-# - [tldr-pages](https://github.com/tldr-pages/tldr)
-# - [Wget](https://www.gnu.org/software/wget/)
-# - [zoxide](https://github.com/ajeetdsouza/zoxide)
+# This script installs a custom enviroment and tools for Debian and Mint installs. 
 #
-# More information on https://github.com/fellipec/customshell
-
+# More information on https://github.com/fellipec/customshell or on README.md file
+# Luiz Fellipe Carneiro 2024
 
 # Make sure the system is updated
 echo -e "================================="
@@ -59,8 +34,6 @@ if [[ $(dpkg-query -W -f='${Status}' tldr 2>/dev/null | grep -c "ok installed") 
     echo -e "\nUpdating tldr..."
     tldr --update
 fi
-
-
 
 # Install the GUI apps only if in a x11 or wayland session
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
@@ -260,6 +233,63 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
     else
         echo -e "Ignoring Dracula theme\n"
+    fi
+fi
+
+# Neovim Install
+#
+# The default Neovim on the repos of both Debian and Mint are too old
+# Here detects the OS and install the appropriate version
+# Either from the tarball for Debian or through a PPA for Mint
+
+# Function to determine the OS
+get_os() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        echo $ID
+    else
+        echo "Unknown"
+    fi
+}
+
+# Get the OS ID
+OS=$(get_os)
+
+# Install the appropriate package based on the OS
+case $OS in
+    debian)
+        echo "Detected Debian. Installing the Debian packages."
+        sudo apt install make gcc ripgrep unzip git xclip curl
+        # Now we install nvim
+        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+        sudo rm -rf /opt/nvim-linux64
+        sudo mkdir -p /opt/nvim-linux64
+        sudo chmod a+rX /opt/nvim-linux64
+        sudo tar -C /opt -xzf nvim-linux64.tar.gz
+        # make it available in /usr/local/bin, distro installs to /usr/bin
+        sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/
+        ;;
+    ubuntu)
+        echo "Detected Ubuntu. Installing the Ubuntu packages."
+        sudo add-apt-repository ppa:neovim-ppa/unstable -y
+        sudo apt update
+        sudo apt install make gcc ripgrep unzip git xclip neovim
+        ;;
+    linuxmint)
+        echo "Detected Linux Mint. Installing the Mint packages."
+        sudo add-apt-repository ppa:neovim-ppa/unstable -y
+        sudo apt update
+        sudo apt install make gcc ripgrep unzip git xclip neovim
+        ;;
+    *)
+        echo "Unsupported OS: $OS"
+        exit 1
+        ;;
+esac
+
+if ! git clone git@github.com:fellipec/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim; then
+    if ! git clone https://github.com/fellipec/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim; then
+        echo "Could not download the Neovim kickstart."
     fi
 fi
 
