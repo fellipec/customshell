@@ -216,6 +216,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         ./install.sh -d $HOME/.icons dracula
         cd ..
         rm -rf Tela-circle-icon-theme
+        gsettings set org.x.apps.portal color-scheme prefer-dark
         gsettings set org.cinnamon.desktop.interface gtk-theme Dracula-slim-standard-buttons
         gsettings set org.cinnamon.desktop.wm.preferences theme Dracula-slim-standard-buttons 
         gsettings set org.cinnamon.desktop.interface cursor-theme Dracula-cursors
