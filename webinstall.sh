@@ -38,7 +38,7 @@ fi
 # Install the GUI apps only if in a x11 or wayland session
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     echo -e "\n\nSession ${XDG_SESSION_TYPE} detected, installing gui apps..."
-    INSTALL_PKGS_GUI="sakura alacritty gparted"
+    INSTALL_PKGS_GUI="sakura alacritty gparted fonts-noto"
     for i in $INSTALL_PKGS_GUI; do
         if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
             echo -e "\n Installing $i"
