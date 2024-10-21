@@ -20,7 +20,7 @@ In addition it installs the following packages:
 - [fzf](https://github.com/junegunn/fzf)
 - [Git](https://git-scm.com/)
 - [GnuPG](https://gnupg.org/)
-- [GParted](https://gparted.org/)(
+- [GParted](https://gparted.org/)
 - [Htop](https://htop.dev/)
 - [LSDeluxe](https://github.com/lsd-rs/lsd)
 - [rsync](https://github.com/RsyncProject/rsync)
@@ -56,7 +56,7 @@ Besides replacing the `.bashrc` and `.zshrc` with custom ones, the following con
 
 - The default shell is changed to `/usr/bin/zsh`
 - Oh My Zsh! is installed and with P10K Theme and some other convenience features
-- Neovim installed with kickstart
+- vim is installed, set as default editor and a .vimrc and .vim directory are installed with custom configs
 - The default terminal is changed to Alacritty or Sakura if the former is not available
 - Add xkboption `eurosign:e` to X11
 - An alias redirect `ls` to `lsd`
