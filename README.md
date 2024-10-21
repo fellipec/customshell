@@ -20,14 +20,15 @@ In addition it installs the following packages:
 - [fzf](https://github.com/junegunn/fzf)
 - [Git](https://git-scm.com/)
 - [GnuPG](https://gnupg.org/)
-- [GParted](https://gparted.org/)
+- [GParted](https://gparted.org/)(
 - [Htop](https://htop.dev/)
 - [LSDeluxe](https://github.com/lsd-rs/lsd)
-- [Neovim](https://neovim.io/)
-  - [Kickstart (Personal Fork)](https://github.com/fellipec/kickstart.nvim)
 - [rsync](https://github.com/RsyncProject/rsync)
 - [Sakura](https://github.com/dabisu/sakura)
 - [tldr-pages](https://github.com/tldr-pages/tldr)
+- [vim](https://www.vim.org/)
+  - [vim-plug](https://github.com/junegunn/vim-plug)
+  - [vim-airline](https://github.com/vim-airline/vim-airline)
 - [Wget](https://www.gnu.org/software/wget/)
 - [zoxide](https://github.com/ajeetdsouza/zoxide)
 
