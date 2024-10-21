@@ -153,6 +153,9 @@ if [[ $ZSHELL == 'y' ]]; then
     curl -L https://raw.githubusercontent.com/fellipec/customshell/main/zshrc --output ~/.zshrc
     curl -L https://raw.githubusercontent.com/fellipec/customshell/main/bashrc --output ~/.bashrc
     curl -L https://raw.githubusercontent.com/fellipec/customshell/main/nanorc --output ~/.nanorc
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/vim_config.tar.gz --output ~/vim_config.tar.gz
+    tar -xvzf vim_config.tar.gz -C ~/
+    rm vim_config.tar.gz
 
     # Change the default shell to ZSH (If is not already)
     if [[ $SHELL != '/usr/bin/zsh' ]]; then
