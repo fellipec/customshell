@@ -16,7 +16,7 @@ sudo apt autoremove
 
 # Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
-INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf fd-find"
+INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf fd-find vim"
 for i in $INSTALL_PKGS; do
     if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
         echo -e "\n Installing $i"
@@ -236,65 +236,6 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
     else
         echo -e "Ignoring Dracula theme\n"
-    fi
-fi
-
-# Neovim Install
-#
-# The default Neovim on the repos of both Debian and Mint are too old
-# Here detects the OS and install the appropriate version
-# Either from the tarball for Debian or through a PPA for Mint
-
-# Skip if not 64bit (Yeah that netbook still 32)
-
-ARCH=$(uname -m)
-if [ "$ARCH" == "x86_64" ]; then
-    # Function to determine the OS
-    get_os() {
-        if [ -f /etc/os-release ]; then
-            . /etc/os-release
-            echo $ID
-        else
-            echo "Unknown"
-        fi
-    }
-    # Get the OS ID
-    OS=$(get_os)
-    # Install the appropriate package based on the OS
-    case $OS in
-        debian)
-            echo "Detected Debian. Installing the Debian packages."
-            sudo apt install make gcc ripgrep unzip git xclip curl
-            # Now we install nvim
-            curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-            sudo rm -rf /opt/nvim-linux64
-            sudo mkdir -p /opt/nvim-linux64
-            sudo chmod a+rX /opt/nvim-linux64
-            sudo tar -C /opt -xzf nvim-linux64.tar.gz
-            # make it available in /usr/local/bin, distro installs to /usr/bin
-            sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/
-            ;;
-        ubuntu)
-            echo "Detected Ubuntu. Installing the Ubuntu packages."
-            sudo add-apt-repository ppa:neovim-ppa/unstable -y
-            sudo apt update
-            sudo apt install make gcc ripgrep unzip git xclip neovim
-            ;;
-        linuxmint)
-            echo "Detected Linux Mint. Installing the Mint packages."
-            sudo add-apt-repository ppa:neovim-ppa/unstable -y
-            sudo apt update
-            sudo apt install make gcc ripgrep unzip git xclip neovim
-            ;;
-        *)
-            echo "Unsupported OS: $OS"
-            exit 1
-            ;;
-    esac
-    if ! git clone git@github.com:fellipec/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim; then
-        if ! git clone https://github.com/fellipec/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim; then
-            echo "Could not download the Neovim kickstart."
-        fi
     fi
 fi
 
