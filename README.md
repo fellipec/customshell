@@ -16,6 +16,7 @@ In addition it installs the following packages:
 - [cURL](https://curl.se/)
 - [Duf](https://github.com/muesli/duf)
 - [fdfind](https://github.com/sharkdp/fd)
+- [ffmpeg](https://ffmpeg.org/)
 - [fonts-noto](https://notofonts.github.io/)
 - [fzf](https://github.com/junegunn/fzf)
 - [Git](https://git-scm.com/)
