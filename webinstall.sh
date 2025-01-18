@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# This script installs a custom enviroment and tools for Debian and Mint installs. 
+# This script installs a custom environment and tools for Debian and Mint installs. 
 #
 # More information on https://github.com/fellipec/customshell or on README.md file
 # Luiz Fellipe Carneiro 2024
 
 # Make sure the system is updated
-echo -e "================================="
-echo -e "Configuring the custom enviroment"
-echo -e "================================="
+echo -e "=================================="
+echo -e "Configuring the custom environment"
+echo -e "=================================="
 echo -e "\n\nUpdating the system..."
 sudo apt update
 sudo apt upgrade
@@ -38,7 +38,7 @@ fi
 # Install the GUI apps only if in a x11 or wayland session
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     echo -e "\n\nSession ${XDG_SESSION_TYPE} detected, installing gui apps..."
-    INSTALL_PKGS_GUI="sakura alacritty gparted fonts-noto"
+    INSTALL_PKGS_GUI="sakura alacritty gparted fonts-noto flameshot"
     for i in $INSTALL_PKGS_GUI; do
         if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
             echo -e "\n Installing $i"
@@ -193,10 +193,14 @@ if [[ $ZSHELL == 'y' ]]; then
 
 fi
 
+# Theme and GUI options
+# =====================
+
 # User selection to copy the Dracula theme
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
-    echo -e "Install/Update Dracula Theme?"
+    echo -e "Install/Update Dracula Theme and configure the Cinnamon GUI?\n"
+    echo -e "ATTENTION: Only tested with Cinnamon Desktop"
     read -p "y/[n]" INST_DRACULA
 
     if [[ $INST_DRACULA == 'y' ]]; then
@@ -213,31 +217,67 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         curl -L https://github.com/dracula/gtk/releases/latest/download/Dracula-cursors.tar.xz | tar -xJf -
         git clone --depth 1 https://github.com/vinceliuice/Tela-circle-icon-theme.git
         cd Tela-circle-icon-theme
+        ./install.sh -d $HOME/.icons 
         ./install.sh -d $HOME/.icons dracula
+        ./install.sh -d $HOME/.icons blue
+        ./install.sh -d $HOME/.icons orange
+        ./install.sh -d $HOME/.icons black
         cd ..
         rm -rf Tela-circle-icon-theme
         gsettings set org.x.apps.portal color-scheme prefer-dark
         gsettings set org.cinnamon.desktop.interface clock-show-date true
         gsettings set org.gnome.desktop.interface clock-show-date true
-        gsettings set org.cinnamon.desktop.interface gtk-theme Dracula-slim-standard-buttons
-        gsettings set org.cinnamon.desktop.wm.preferences theme Dracula-slim-standard-buttons 
         gsettings set org.cinnamon.desktop.interface cursor-theme Dracula-cursors
-        gsettings set org.cinnamon.theme name Dracula-slim-standard-buttons
-        gsettings set org.cinnamon.desktop.interface icon-theme Tela-circle-dracula
+        gsettings set org.cinnamon.desktop.interface icon-theme Tela-circle
+        gsettings set org.cinnamon.desktop.interface gtk-theme Mint-Y-Dark-Aqua
+        gsettings set org.cinnamon.desktop.wm.preferences theme Mint-Y-Dark-Aqua
+        gsettings set org.cinnamon.theme name Mint-Y-Dark-Aqua
+
         gsettings set org.cinnamon.desktop.keybindings.media-keys screensaver "['<Super>l', 'XF86ScreenSaver']"
         gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>l']"
         gsettings set org.cinnamon.desktop.keybindings looking-glass-keybinding "['<Primary><Alt>l']"
-        if command -v flatpak &> /dev/null ; then
-            sudo flatpak override --filesystem=$HOME/.themes
-            sudo flatpak override --filesystem=$HOME/.icons
-            sudo flatpak override --env=GTK_THEME=Dracula-slim-standard-buttons
-            sudo flatpak override --env=ICON_THEME=Tela-circle-dracula
+
+        # At this point the theme is installed but not in use
+        # Ask user to activate it, setting the theme active and overriding the flatpak theme
+        echo -e "Use Dracula Theme?"
+        read -p "y/[n]" USE_DRACULA
+
+        if [[ $USE_DRACULA == 'y' ]]; then
+            gsettings set org.cinnamon.desktop.interface gtk-theme Dracula-slim-standard-buttons
+            gsettings set org.cinnamon.desktop.wm.preferences theme Dracula-slim-standard-buttons 
+            gsettings set org.cinnamon.desktop.interface cursor-theme Dracula-cursors
+            gsettings set org.cinnamon.theme name Dracula-slim-standard-buttons
+            gsettings set org.cinnamon.desktop.interface icon-theme Tela-circle-dracula
+            if command -v flatpak &> /dev/null ; then
+                sudo flatpak override --filesystem=$HOME/.themes
+                sudo flatpak override --filesystem=$HOME/.icons
+                sudo flatpak override --env=GTK_THEME=Dracula-slim-standard-buttons
+                sudo flatpak override --env=ICON_THEME=Tela-circle-dracula
+            fi
+        else
+            echo -e "Dracula theme installed but not in use\n"
         fi
 
     else
-        echo -e "Ignoring Dracula theme\n"
+        echo -e "Ignoring Dracula theme and GUI settings\n"
     fi
+
+
+    echo -e "Configure Flameshot Print Screen Shortcut?\n"
+    echo -e "This will configure the Print Screen key to open Flameshot AND ERASE ALL OTHER CUSTOM KEYBINDINGS"
+    read -p "y/[n]" FS_SHORTCUT
+
+    if [[ $FS_SHORTCUT == 'y' ]]; then
+        dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/binding "['Print']"
+        dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/name "'Screen Shot with Flameshot'"
+        dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/command "'flameshot gui'"
+        dconf write /org/cinnamon/desktop/keybindings/custom-list "['custom0', '__dummy__']"
+    fi
+
+
 fi
+
+
 
 #User selection to install vim config
 echo -e "\n\nDownload VIM config?:\n"
