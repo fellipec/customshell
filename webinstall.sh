@@ -199,7 +199,7 @@ fi
 # User selection to copy the Dracula theme
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
-    echo -e "Install/Update Dracula Theme and configure the Cinnamon GUI?\n"
+    echo -e "Install/Update Dracula Theme and configure the Cinnamon GUI?"
     echo -e "ATTENTION: Only tested with Cinnamon Desktop"
     read -p "y/[n]" INST_DRACULA
 
@@ -263,7 +263,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     fi
 
 
-    echo -e "Configure Flameshot Print Screen Shortcut?\n"
+    echo -e "Configure Flameshot Print Screen Shortcut?"
     echo -e "This will configure the Print Screen key to open Flameshot AND ERASE ALL OTHER CUSTOM KEYBINDINGS"
     read -p "y/[n]" FS_SHORTCUT
 
