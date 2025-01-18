@@ -236,6 +236,15 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         gsettings set org.cinnamon.desktop.keybindings.media-keys screensaver "['<Super>l', 'XF86ScreenSaver']"
         gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>l']"
         gsettings set org.cinnamon.desktop.keybindings looking-glass-keybinding "['<Primary><Alt>l']"
+        if command -v flatpak &> /dev/null ; then
+            sudo flatpak override --filesystem=$HOME/.themes
+            sudo flatpak override --filesystem=$HOME/.icons
+            sudo flatpak override --env=GTK_THEME=Mint-Y-Dark-Aqua:dark
+            sudo flatpak override --env=ICON_THEME=Tela-circle
+            sudo flatpak override --env=QT_STYLE_OVERRIDE=Mint-Y-Dark-Aqua
+            sudo flatpak override --env=GTK_STYLE_OVERRIDE=Mint-Y-Dark-Aqua
+        fi
+
 
         # At this point the theme is installed but not in use
         # Ask user to activate it, setting the theme active and overriding the flatpak theme
@@ -251,8 +260,10 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
             if command -v flatpak &> /dev/null ; then
                 sudo flatpak override --filesystem=$HOME/.themes
                 sudo flatpak override --filesystem=$HOME/.icons
-                sudo flatpak override --env=GTK_THEME=Dracula-slim-standard-buttons
+                sudo flatpak override --env=GTK_THEME=Dracula-slim-standard-buttons:dark
                 sudo flatpak override --env=ICON_THEME=Tela-circle-dracula
+                sudo flatpak override --env=QT_STYLE_OVERRIDE=Dracula-slim-standard-buttons
+                sudo flatpak override --env=GTK_STYLE_OVERRIDE=Dracula-slim-standard-buttons
             fi
         else
             echo -e "Dracula theme installed but not in use\n"
