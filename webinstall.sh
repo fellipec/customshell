@@ -299,7 +299,8 @@ if [[ $DLVIM == 'y' ]]; then
     tar -xvzf ~/vim_config.tar.gz -C ~/
     rm ~/vim_config.tar.gz
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
+    sudo cp -r ~/.vim /root
+    sudo cp ~/.vimrc /root
 fi
 
 #User selection of /tmp to be on RAM
