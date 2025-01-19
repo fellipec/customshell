@@ -236,6 +236,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         gsettings set org.cinnamon.desktop.keybindings.media-keys screensaver "['<Super>l', 'XF86ScreenSaver']"
         gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>l']"
         gsettings set org.cinnamon.desktop.keybindings looking-glass-keybinding "['<Primary><Alt>l']"
+        gsettings set org.cinnamon.desktop.keybindings.media-keys terminal "['<Primary><Alt>t','<Super>t']"
         if command -v flatpak &> /dev/null ; then
             sudo flatpak override --filesystem=$HOME/.themes
             sudo flatpak override --filesystem=$HOME/.icons
