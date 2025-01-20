@@ -66,27 +66,7 @@ mouse.enabled = true
 binding = { key = "U", mods = "Control|Shift" }
 regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
 
-
-
-# Dracula theme for Alacritty
-# https://draculatheme.com/alacritty
-#
-# Color palette
-# https://spec.draculatheme.com
-#
-# Instructions
-# https://github.com/alacritty/alacritty/blob/master/extra/man/alacritty.5.scd
-
-[colors.primary]
-
-background = "#282a36"
-foreground = "#f8f8f2"
-bright_foreground = "#ffffff"
-
-[colors.cursor]
-
-text = "#282a36"
-cursor = "#f8f8f2"
+# Custom colors
 
 [colors.vi_mode_cursor]
 
@@ -98,27 +78,6 @@ cursor = "CellForeground"
 text = "CellForeground"
 background = "#44475a"
 
-[colors.normal]
-
-black = "#21222c"
-red = "#ff5555"
-green = "#50fa7b"
-yellow = "#f1fa8c"
-blue = "#bd93f9"
-magenta = "#ff79c6"
-cyan = "#8be9fd"
-white = "#f8f8f2"
-
-[colors.bright]
-
-black = "#6272a4"
-red = "#ff6e6e"
-green = "#69ff94"
-yellow = "#ffffa5"
-blue = "#d6acff"
-magenta = "#ff92df"
-cyan = "#a4ffff"
-white = "#ffffff"
 
 [colors.search.matches]
 
@@ -144,3 +103,34 @@ background = "#f1fa8c"
 
 foreground = "#f1fa8c"
 background = "#282a36"
+
+# Default colors
+[colors.primary]
+background = '#171d23'
+foreground = '#ffffff'
+
+# Cursor colors
+[colors.cursor]
+cursor = '#fafafa'
+text   = '#008b94'
+
+# Normal colors
+[colors.normal]
+black   = '#333f4a'
+red     = '#d95468'
+green   = '#8bd49c'
+blue    = '#539afc'
+magenta = '#b62d65'
+cyan    = '#70e1e8'
+white   = '#b7c5d3'
+
+# Bright colors
+[colors.bright]
+black   = '#41505e'
+red     = '#d95468'
+green   = '#8bd49c'
+yellow  = '#ebbf83'
+blue    = '#5ec4ff'
+magenta = '#e27e8d'
+cyan    = '#70e1e8'
+white   = '#ffffff'
