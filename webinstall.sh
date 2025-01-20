@@ -215,6 +215,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         curl -L https://github.com/dracula/gtk/releases/latest/download/Dracula.tar.xz | tar -xJf -
         cd $HOME/.icons
         curl -L https://gitlab.com/-/project/6703061/uploads/71144f0c1abaed7824804bf23bad0a88/Hackneyed-Dark-0.9.3-right-handed.tar.bz2 | tar -xjf -
+        curl -L https://gitlab.com/-/project/6703061/uploads/1947bc32837caa903cfabf16c80971d7/Hackneyed-0.9.3-right-handed.tar.bz2 | tar -xjf -
         git clone --depth 1 https://github.com/vinceliuice/Tela-icon-theme.git
         cd Tela-icon-theme
         ./install.sh -d $HOME/.icons
@@ -224,7 +225,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         gsettings set org.x.apps.portal color-scheme prefer-dark
         gsettings set org.cinnamon.desktop.interface clock-show-date true
         gsettings set org.gnome.desktop.interface clock-show-date true
-        gsettings set org.cinnamon.desktop.interface cursor-theme Hackneyed-Dark
+        gsettings set org.cinnamon.desktop.interface cursor-theme Hackneyed
         gsettings set org.cinnamon.desktop.interface icon-theme Tela-dark
         gsettings set org.cinnamon.desktop.interface gtk-theme Mint-Y-Dark-Aqua
         gsettings set org.cinnamon.desktop.wm.preferences theme Mint-Y-Dark-Aqua
