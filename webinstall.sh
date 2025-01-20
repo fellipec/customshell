@@ -220,6 +220,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         ./install.sh -d $HOME/.icons
         cd ..
         rm -rf Tela-icon-theme
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/xed_config | dconf load /org/x/editor/preferences/ 
         gsettings set org.x.apps.portal color-scheme prefer-dark
         gsettings set org.cinnamon.desktop.interface clock-show-date true
         gsettings set org.gnome.desktop.interface clock-show-date true
