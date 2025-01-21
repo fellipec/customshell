@@ -231,7 +231,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         gsettings set org.cinnamon.desktop.interface icon-theme Tela-circle
         gsettings set org.cinnamon.desktop.interface gtk-theme Mint-Y-Dark-Aqua
         gsettings set org.cinnamon.desktop.wm.preferences theme Mint-Y-Dark-Aqua
-        gsettings set org.cinnamon.theme name Mint-Y-Dark-Aqua
+        gsettings set org.cinnamon.theme name cinnamon
 
         gsettings set org.cinnamon.desktop.keybindings.media-keys screensaver "['<Super>l', 'XF86ScreenSaver']"
         gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>l']"
