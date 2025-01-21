@@ -196,14 +196,14 @@ fi
 # Theme and GUI options
 # =====================
 
-# User selection to copy the Dracula theme
+# User selection to personalize theme
 if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
-    echo -e "Install/Update Dracula Theme and configure the Cinnamon GUI?"
+    echo -e "Personalize Theme and configure the Cinnamon GUI?"
     echo -e "ATTENTION: Only tested with Cinnamon Desktop"
-    read -p "y/[n]" INST_DRACULA
+    read -p "y/[n]" INST_THEME
 
-    if [[ $INST_DRACULA == 'y' ]]; then
+    if [[ $INST_THEME == 'y' ]]; then
         cd $HOME
         if ! [[ -e ~/.icons ]]; then
             mkdir .icons
@@ -214,21 +214,19 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         cd $HOME/.themes
         curl -L https://github.com/dracula/gtk/releases/latest/download/Dracula.tar.xz | tar -xJf -
         cd $HOME/.icons
-        curl -L https://github.com/dracula/gtk/releases/latest/download/Dracula-cursors.tar.xz | tar -xJf -
-        git clone --depth 1 https://github.com/vinceliuice/Tela-circle-icon-theme.git
-        cd Tela-circle-icon-theme
-        ./install.sh -d $HOME/.icons 
-        ./install.sh -d $HOME/.icons dracula
-        ./install.sh -d $HOME/.icons blue
-        ./install.sh -d $HOME/.icons orange
-        ./install.sh -d $HOME/.icons black
+        curl -L https://gitlab.com/-/project/6703061/uploads/71144f0c1abaed7824804bf23bad0a88/Hackneyed-Dark-0.9.3-right-handed.tar.bz2 | tar -xjf -
+        curl -L https://gitlab.com/-/project/6703061/uploads/1947bc32837caa903cfabf16c80971d7/Hackneyed-0.9.3-right-handed.tar.bz2 | tar -xjf -
+        git clone --depth 1 https://github.com/vinceliuice/Tela-icon-theme.git
+        cd Tela-icon-theme
+        ./install.sh -d $HOME/.icons
         cd ..
-        rm -rf Tela-circle-icon-theme
+        rm -rf Tela-icon-theme
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/xed_config | dconf load /org/x/editor/preferences/ 
         gsettings set org.x.apps.portal color-scheme prefer-dark
         gsettings set org.cinnamon.desktop.interface clock-show-date true
         gsettings set org.gnome.desktop.interface clock-show-date true
-        gsettings set org.cinnamon.desktop.interface cursor-theme Dracula-cursors
-        gsettings set org.cinnamon.desktop.interface icon-theme Tela-circle
+        gsettings set org.cinnamon.desktop.interface cursor-theme Hackneyed
+        gsettings set org.cinnamon.desktop.interface icon-theme Tela-dark
         gsettings set org.cinnamon.desktop.interface gtk-theme Mint-Y-Dark-Aqua
         gsettings set org.cinnamon.desktop.wm.preferences theme Mint-Y-Dark-Aqua
         gsettings set org.cinnamon.theme name cinnamon
@@ -245,35 +243,9 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
             sudo flatpak override --env=QT_STYLE_OVERRIDE=Mint-Y-Dark-Aqua
             sudo flatpak override --env=GTK_STYLE_OVERRIDE=Mint-Y-Dark-Aqua
         fi
-
-
-        # At this point the theme is installed but not in use
-        # Ask user to activate it, setting the theme active and overriding the flatpak theme
-        echo -e "Use Dracula Theme?"
-        read -p "y/[n]" USE_DRACULA
-
-        if [[ $USE_DRACULA == 'y' ]]; then
-            gsettings set org.cinnamon.desktop.interface gtk-theme Dracula-slim-standard-buttons
-            gsettings set org.cinnamon.desktop.wm.preferences theme Dracula-slim-standard-buttons 
-            gsettings set org.cinnamon.desktop.interface cursor-theme Dracula-cursors
-            gsettings set org.cinnamon.theme name Dracula-slim-standard-buttons
-            gsettings set org.cinnamon.desktop.interface icon-theme Tela-circle-dracula
-            if command -v flatpak &> /dev/null ; then
-                sudo flatpak override --filesystem=$HOME/.themes
-                sudo flatpak override --filesystem=$HOME/.icons
-                sudo flatpak override --env=GTK_THEME=Dracula-slim-standard-buttons:dark
-                sudo flatpak override --env=ICON_THEME=Tela-circle-dracula
-                sudo flatpak override --env=QT_STYLE_OVERRIDE=Dracula-slim-standard-buttons
-                sudo flatpak override --env=GTK_STYLE_OVERRIDE=Dracula-slim-standard-buttons
-            fi
-        else
-            echo -e "Dracula theme installed but not in use\n"
-        fi
-
     else
-        echo -e "Ignoring Dracula theme and GUI settings\n"
+        echo -e "Ignoring personalized theme and GUI settings\n"
     fi
-
 
     echo -e "Configure Flameshot Print Screen Shortcut?"
     echo -e "This will configure the Print Screen key to open Flameshot AND ERASE ALL OTHER CUSTOM KEYBINDINGS"
