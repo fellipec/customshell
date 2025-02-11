@@ -243,6 +243,10 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
             sudo flatpak override --env=QT_STYLE_OVERRIDE=Mint-Y-Dark-Aqua
             sudo flatpak override --env=GTK_STYLE_OVERRIDE=Mint-Y-Dark-Aqua
         fi
+        # Install the Wallpaper-Rotator client
+        mkdir -p ~/.config/wallpaper-rotator
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/wallpaper-rotator.ini --output ~/.config/wallpaper-rotator/config.ini
+        bash -c "$(curl -fsSL https://raw.githubusercontent.com/fellipec/Wallpaper-Rotator/master/install.sh)"
     else
         echo -e "Ignoring personalized theme and GUI settings\n"
     fi
