@@ -16,7 +16,7 @@ sudo apt autoremove
 
 # Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
-INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf fd-find vim ffmpeg"
+INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf fd-find vim ffmpeg python3 python3-venv"
 for i in $INSTALL_PKGS; do
     if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
         echo -e "\n Installing $i"
