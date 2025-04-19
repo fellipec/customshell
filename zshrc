@@ -119,6 +119,13 @@ unsetopt no_match
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+
+# Be paranoid
+alias cp="cp -ip"
+alias rm="rm -i"
+alias mv="mv -i"
+
+
 alias cls="clear"
 alias ls="lsd"
 alias bat="batcat --theme=Dracula"
