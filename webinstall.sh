@@ -106,6 +106,19 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         echo -e "\nInstalling € configuration"
         sudo curl -L https://raw.githubusercontent.com/fellipec/customshell/main/99-abnteuro.conf --output /etc/X11/xorg.conf.d/99-abnteuro.conf
     fi
+
+    # Adiciona GTK_IM_MODULE=xim em /etc/environment para corrigir problemas de input em algumas aplicações GTK (Firefox)
+    FILEENV="/etc/environment"
+    LINEXIM="GTK_IM_MODULE=xim"
+
+    # Verifica se a linha já existe
+    if grep -Fxq "$LINEXIM" "$FILEENV"; then
+        echo "A linha já existe em $FILEENV."
+    else
+        echo "$LINEXIM" | sudo tee -a "$FILEENV" > /dev/null
+        echo "Linha adicionada em $FILEENV."
+    fi
+
 fi
 
 # Installs zoxide
