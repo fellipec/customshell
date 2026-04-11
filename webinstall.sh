@@ -16,7 +16,7 @@ sudo apt autoremove
 
 # Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
-INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf fd-find vim ffmpeg python3 python3-venv restic rclone"
+INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf fd-find vim ffmpeg python3 python3-venv rclone"
 for i in $INSTALL_PKGS; do
     if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
         echo -e "\n Installing $i"
@@ -28,6 +28,10 @@ done
 echo -e "\nInstalling/updating yt-dlp..."
 sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp --output /usr/local/bin/yt-dlp
 sudo chmod +x /usr/local/bin/yt-dlp
+
+# restic from repos is always old, using a installer script to get the latest
+echo -e "\nInstalling/updating restic..."
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/fellipec/customshell/main/dl-restic.sh)"
 
 # before tldr can be used, it needs to be updated
 if [[ $(dpkg-query -W -f='${Status}' tldr 2>/dev/null | grep -c "ok installed") -eq 1 ]]; then 
