@@ -32,6 +32,18 @@ sudo chmod +x /usr/local/bin/yt-dlp
 # restic from repos is always old, using a installer script to get the latest
 echo -e "\nInstalling/updating restic..."
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/fellipec/customshell/main/dl-restic.sh)"
+read -p "Try to install Restic Scripts (Only works connected to the personal network) [y/N]: " RESTICSCRIPTS
+
+if [[ $RESTICSCRIPTS =~ ^[Yy]$ ]]; then
+    mkdir -p "$HOME/.local/bin" "$HOME/.config/systemd/user"
+    scp scarlett.vpn:backuprestic "$HOME/.local/bin/backuprestic"
+    scp scarlett.vpn:restic-excludes.txt "$HOME/.local/bin/restic-excludes.txt"
+    scp scarlett.vpn:restic-backup.service "$HOME/.config/systemd/user/restic-backup.service"
+    scp scarlett.vpn:restic-backup.timer "$HOME/.config/systemd/user/restic-backup.timer"
+    chmod +x "$HOME/.local/bin/backuprestic"
+    systemctl --user daemon-reload
+    systemctl --user enable --now restic-backup.timer
+fi
 
 # before tldr can be used, it needs to be updated
 if [[ $(dpkg-query -W -f='${Status}' tldr 2>/dev/null | grep -c "ok installed") -eq 1 ]]; then 
@@ -55,10 +67,8 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     if command -v sakura &> /dev/null
         then
             echo -e "\n\nConfiguring Sakura terminal"
-            if ! [[ -e ~/.config/sakura ]]; then
-                mkdir ~/.config/sakura
-            fi
-            curl -L https://raw.githubusercontent.com/fellipec/customshell/main/sakura.conf --output ~/.config/sakura/sakura.conf
+            mkdir -p "$HOME/.config/sakura"
+            curl -L https://raw.githubusercontent.com/fellipec/customshell/main/sakura.conf --output "$HOME/.config/sakura/sakura.conf"
             sudo update-alternatives --set x-terminal-emulator /usr/bin/sakura
             gsettings set org.cinnamon.desktop.default-applications.terminal exec 'sakura'
     fi
@@ -66,9 +76,8 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     if command -v alacritty &> /dev/null
         then
             echo -e "\n\nConfiguring Alacritty terminal"
-            if ! [[ -e ~/.config/alacritty ]]; then
-                mkdir ~/.config/alacritty
-            fi
+            mkdir -p "$HOME/.config/alacritty"
+
             # Get Alacritty version
             # Older versions of Alacritty that ships with Debian up to Trixie use yml config
             # Newer versions user toml config
@@ -77,15 +86,12 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
             version_ge() {
                 [[ "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1" ]]
             }
-            # Commands to run
-            COMMAND_IF_GE="curl -L https://raw.githubusercontent.com/fellipec/customshell/main/alacritty.toml --output ~/.config/alacritty/alacritty.toml"
-            COMMAND_IF_LT="curl -L https://raw.githubusercontent.com/fellipec/customshell/main/alacritty.yml --output ~/.config/alacritty/alacritty.yml"
 
             # Compare versions and run the appropriate command
             if version_ge "$VERSION" "0.13"; then
-                eval "$COMMAND_IF_GE"
+                curl -L https://raw.githubusercontent.com/fellipec/customshell/main/alacritty.toml --output "$HOME/.config/alacritty/alacritty.toml"
             else
-                eval "$COMMAND_IF_LT"
+                curl -L https://raw.githubusercontent.com/fellipec/customshell/main/alacritty.yml --output "$HOME/.config/alacritty/alacritty.yml"
             fi
             sudo update-alternatives --set x-terminal-emulator /usr/bin/alacritty
             gsettings set org.cinnamon.desktop.default-applications.terminal exec 'alacritty'
@@ -93,9 +99,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
 
     # Install or update the Powerlevel10k recommended font
     echo -e "\n\nInstalling fonts..."
-    if ! [[ -e ~/.fonts ]]; then
-        mkdir ~/.fonts
-    fi
+    mkdir -p "$HOME/.fonts"
     curl --retry 5 -L https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.tar.xz | tar xJ --directory=$HOME/.fonts
     fc-cache
     gsettings set org.gnome.desktop.interface monospace-font-name 'MesloLGS Nerd Font 11'
@@ -127,8 +131,9 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
         # Install FSearch
         echo -e "\nInstalling FSearch via flatpak..."
         flatpak install --noninteractive flathub io.github.cboxdoerfer.FSearch
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/fsearch-update.service --output ~/.config/systemd/user/fsearch-update.service
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/fsearch-update.timer --output ~/.config/systemd/user/fsearch-update.timer
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/fsearch-update.service --output "$HOME/.config/systemd/user/fsearch-update.service"
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/fsearch-update.timer --output "$HOME/.config/systemd/user/fsearch-update.timer"
+        systemctl --user daemon-reload
         systemctl --user enable --now fsearch-update.timer
     fi
 
@@ -139,14 +144,14 @@ curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh 
 
 # Backups the current bashrc and zshrc
 echo -e "\n\nBackuping current config..."
-cp ~/.bashrc ~/.bashrc.bkp
-cp ~/.zshrc ~/.zshrc.bkp
+[[ -f "$HOME/.bashrc" ]] && cp "$HOME/.bashrc" "$HOME/.bashrc.bkp"
+[[ -f "$HOME/.zshrc" ]] && cp "$HOME/.zshrc" "$HOME/.zshrc.bkp"
 
 #User selection of shell
 echo -e "\n\nInstall and configure zsh and oh my zsh?:\n"
 read -p "[y/N]: " ZSHELL
 
-if [[ $ZSHELL == 'y' ]]; then
+if [[ $ZSHELL =~ ^[Yy]$ ]]; then
 
     echo -e "\n\nInstalling packages..."
     INSTALL_PKGS="zsh zsh-common zsh-doc zsh-autosuggestions zsh-syntax-highlighting"
@@ -158,7 +163,7 @@ if [[ $ZSHELL == 'y' ]]; then
     done
 
     # Checks for oh-my-zsh and install if needed
-    if ! [[ -e ~/.oh-my-zsh ]]; then
+    if ! [[ -e $HOME/.oh-my-zsh ]]; then
         echo -e "\n\nInstalling Oh My Zsh! \n Type exit after install is completed"
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     else
@@ -166,7 +171,7 @@ if [[ $ZSHELL == 'y' ]]; then
     fi
 
     # Checks for Powerlevel10k and install if needed
-    if ! [[ -e ~/.oh-my-zsh/custom/themes/powerlevel10k ]]; then
+    if ! [[ -e "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]]; then
         echo -e "\n\nInstalling Powerlevel10k..."
         git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
     else
@@ -176,9 +181,9 @@ if [[ $ZSHELL == 'y' ]]; then
 
     # Download the custom configuration for ZSH and Powerlevel10k, and nano
     echo -e "\n\nDownloading new configuration..."
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/zshrc --output ~/.zshrc
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/bashrc --output ~/.bashrc
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/nanorc --output ~/.nanorc
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/zshrc --output "$HOME/.zshrc"
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/bashrc --output "$HOME/.bashrc"
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/nanorc --output "$HOME/.nanorc"
 
     # Change the default shell to ZSH (If is not already)
     if [[ $SHELL != '/usr/bin/zsh' ]]; then
@@ -199,19 +204,19 @@ if [[ $ZSHELL == 'y' ]]; then
 
     if [[ $PTKFLAVOR == '1' ]]; then
         echo -e "Copy Powerlevel 10k Black config..."
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.black --output ~/.p10k.zsh
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.black --output "$HOME/.p10k.zsh"
     elif [[ $PTKFLAVOR == '2' ]]; then
         echo -e "Copy Powerlevel 10k Color config..."
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.color --output ~/.p10k.zsh
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.color --output "$HOME/.p10k.zsh"
     elif [[ $PTKFLAVOR == '3' ]]; then
         echo -e "Copy Powerlevel 10k Laptop config..."
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.laptop --output ~/.p10k.zsh
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.laptop --output "$HOME/.p10k.zsh"
     elif [[ $PTKFLAVOR == '4' ]]; then
         echo -e "Copy Powerlevel 10k Full config..."
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.full --output ~/.p10k.zsh
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.full --output "$HOME/.p10k.zsh"
     elif [[ $PTKFLAVOR == '5' ]]; then
         echo -e "Copy Powerlevel 10k Simple config..."
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.simple --output ~/.p10k.zsh
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/p10k.zsh.simple --output "$HOME/.p10k.zsh"
         sed -i 's/alias ls="lsd"/alias ls="lsd --icon never"/' .zshrc
     else
         echo -e "Don't touch the p10k theme"
@@ -229,22 +234,18 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     echo -e "ATTENTION: Only tested with Cinnamon Desktop"
     read -p "y/[n]" INST_THEME
 
-    if [[ $INST_THEME == 'y' ]]; then
-        cd $HOME
-        if ! [[ -e ~/.icons ]]; then
-            mkdir .icons
-        fi
-        if ! [[ -e ~/.themes ]]; then
-            mkdir .themes
-        fi
-        cd $HOME/.themes
+    if [[ $INST_THEME =~ ^[Yy]$ ]]; then
+        cd "$HOME"
+        mkdir -p .icons
+        mkdir -p .themes
+        cd "$HOME/.themes"
         curl -L https://github.com/dracula/gtk/releases/latest/download/Dracula.tar.xz | tar -xJf -
-        cd $HOME/.icons
+        cd "$HOME/.icons"
         curl -L https://gitlab.com/-/project/6703061/uploads/71144f0c1abaed7824804bf23bad0a88/Hackneyed-Dark-0.9.3-right-handed.tar.bz2 | tar -xjf -
         curl -L https://gitlab.com/-/project/6703061/uploads/1947bc32837caa903cfabf16c80971d7/Hackneyed-0.9.3-right-handed.tar.bz2 | tar -xjf -
         git clone --depth 1 https://github.com/vinceliuice/Tela-icon-theme.git
         cd Tela-icon-theme
-        ./install.sh -d $HOME/.icons
+        ./install.sh -d "$HOME/.icons"
         cd ..
         rm -rf Tela-icon-theme
         curl -L https://raw.githubusercontent.com/fellipec/customshell/main/xed_config | dconf load /org/x/editor/preferences/ 
@@ -270,8 +271,8 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
             sudo flatpak override --env=GTK_STYLE_OVERRIDE=Mint-Y-Dark-Aqua
         fi
         # Install the Wallpaper-Rotator client
-        mkdir -p ~/.config/wallpaper-rotator
-        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/wallpaper-rotator.ini --output ~/.config/wallpaper-rotator/config.ini
+        mkdir -p "$HOME/.config/wallpaper-rotator"
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/wallpaper-rotator.ini --output "$HOME/.config/wallpaper-rotator/config.ini"
         bash -c "$(curl -fsSL https://raw.githubusercontent.com/fellipec/Wallpaper-Rotator/master/install.sh)"
     else
         echo -e "Ignoring personalized theme and GUI settings\n"
@@ -281,7 +282,7 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     echo -e "This will configure the Print Screen key to open Flameshot AND ERASE ALL OTHER CUSTOM KEYBINDINGS"
     read -p "y/[n]" FS_SHORTCUT
 
-    if [[ $FS_SHORTCUT == 'y' ]]; then
+    if [[ $FS_SHORTCUT =~ ^[Yy]$ ]]; then
         dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/binding "['Print']"
         dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/name "'Screen Shot with Flameshot'"
         dconf write /org/cinnamon/desktop/keybindings/custom-keybindings/custom0/command "'flameshot gui'"
@@ -296,21 +297,20 @@ fi
 #User selection to install vim config
 echo -e "\n\nDownload VIM config?:\n"
 read -p "[y/N]: " DLVIM
-if [[ $DLVIM == 'y' ]]; then
-
-    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/vim_config.tar.gz --output ~/vim_config.tar.gz
-    tar -xvzf ~/vim_config.tar.gz -C ~/
-    rm ~/vim_config.tar.gz
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    sudo cp -r ~/.vim /root
-    sudo cp ~/.vimrc /root
+if [[ $DLVIM =~ ^[Yy]$ ]]; then
+    curl -L https://raw.githubusercontent.com/fellipec/customshell/main/vim_config.tar.gz --output "$HOME/vim_config.tar.gz"
+    tar -xvzf "$HOME/vim_config.tar.gz" -C "$HOME/"
+    rm "$HOME/vim_config.tar.gz"
+    curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    sudo cp -r "$HOME/.vim" /root
+    sudo cp "$HOME/.vimrc" /root
 fi
 
 #User selection of /tmp to be on RAM
 echo -e "\n\nConfigure /tmp to RAM?:\n"
 read -p "[y/N]: " TMPR
 
-if [[ $TMPR == 'y' ]]; then
+if [[ $TMPR =~ ^[Yy]$ ]]; then
     sudo cp /usr/share/systemd/tmp.mount /etc/systemd/system
     sudo systemctl enable tmp.mount
 fi
@@ -319,7 +319,7 @@ fi
 echo -e "\n\nConfigure journalctl to Volatile?:\n"
 read -p "[y/N]: " JCTLV
 
-if [[ $JCTLV == 'y' ]]; then
+if [[ $JCTLV =~ ^[Yy]$ ]]; then
 
     FILE="/etc/systemd/journald.conf"
 
@@ -336,13 +336,14 @@ if [[ $JCTLV == 'y' ]]; then
     echo -e "\n\nInstall log2ram?:\n"
     read -p "[y/N]: " ILTR
 
-    if [[ $ILTR == 'y' ]]; then
+    if [[ $ILTR =~ ^[Yy]$ ]]; then
         sudo journalctl --vacuum-size=100M
-        sudo rm "/var/log/*.gz"
+        sudo rm /var/log/*.gz
 
-        curl -L https://github.com/azlux/log2ram/archive/master.tar.gz | tar zxf -
-        cd log2ram-master
-        chmod +x install.sh && sudo ./install.sh
+        curl -L https://github.com/azlux/log2ram/archive/master.tar.gz | tar zxf - && \
+            cd log2ram-master && \
+            chmod +x install.sh && \
+            sudo ./install.sh
         cd ..
         rm -r log2ram-master
 
