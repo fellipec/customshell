@@ -49,7 +49,6 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
             sudo apt-get install -y $i
         fi
     done
-
     # Check if sakura or alacritty got installed and download
     # the configuration and make it the default terminal if it was installed
     # Alacritty is last because it's the prefered terminal application
@@ -121,6 +120,16 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     else
         echo "$LINEXIM" | sudo tee -a "$FILEENV" > /dev/null
         echo "Linha adicionada em $FILEENV."
+    fi
+
+    # Check if flatpak is installed
+    if command -v flatpak > /dev/null 2>&1; then
+        # Install FSearch
+        echo -e "\nInstalling FSearch via flatpak..."
+        flatpak install --noninteractive flathub io.github.cboxdoerfer.FSearch
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/fsearch-update.service --output ~/.config/systemd/user/fsearch-update.service
+        curl -L https://raw.githubusercontent.com/fellipec/customshell/main/fsearch-update.timer --output ~/.config/systemd/user/fsearch-update.timer
+        systemctl --user enable --now fsearch-update.timer
     fi
 
 fi

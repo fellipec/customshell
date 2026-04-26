@@ -1,0 +1,7 @@
+# ~/.config/systemd/user/fsearch-update.service
+[Unit]
+Description=FSearch index update
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=fsearch io.github.cboxdoerfer.FSearch --update-database

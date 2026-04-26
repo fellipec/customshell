@@ -1,0 +1,10 @@
+# ~/.config/systemd/user/fsearch-update.timer
+[Unit]
+Description=FSearch index update timer
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target
