@@ -16,7 +16,7 @@ sudo apt autoremove
 
 # Install the packages that work on CLI
 echo -e "\n\nInstalling packages..."
-INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git tldr aspell-br rsync fzf fd-find vim ffmpeg python3 python3-venv jq rclone"
+INSTALL_PKGS="command-not-found byobu lsd bat duf htop btop wget curl git aspell-br rsync fzf fd-find vim ffmpeg python3 python3-venv jq"
 for i in $INSTALL_PKGS; do
     if [[ $(dpkg-query -W -f='${Status}' $i 2>/dev/null | grep -c "ok installed") -eq 0 ]]; then
         echo -e "\n Installing $i"
@@ -43,12 +43,6 @@ if [[ $RESTICSCRIPTS =~ ^[Yy]$ ]]; then
     chmod +x "$HOME/.local/bin/backuprestic"
     systemctl --user daemon-reload
     systemctl --user enable --now restic-backup.timer
-fi
-
-# before tldr can be used, it needs to be updated
-if [[ $(dpkg-query -W -f='${Status}' tldr 2>/dev/null | grep -c "ok installed") -eq 1 ]]; then 
-    echo -e "\nUpdating tldr..."
-    tldr --update
 fi
 
 # Install the GUI apps only if in a x11 or wayland session
@@ -130,7 +124,12 @@ if [[ $XDG_SESSION_TYPE == 'x11' || $XDG_SESSION_TYPE == 'wayland' ]]; then
     if command -v flatpak > /dev/null 2>&1; then
         # Install FSearch
         echo -e "\nInstalling FSearch via flatpak..."
-        flatpak install --noninteractive flathub io.github.cboxdoerfer.FSearch
+        if ! flatpak list --app | grep -q "io.github.cboxdoerfer.FSearch"; then
+            echo -e "\nInstalling FSearch via flatpak..."
+            flatpak install --noninteractive flathub io.github.cboxdoerfer.FSearch
+        else
+            echo -e "\nFSearch already installed, skipping..."
+        fi
         curl -L https://raw.githubusercontent.com/fellipec/customshell/main/fsearch-update.service --output "$HOME/.config/systemd/user/fsearch-update.service"
         curl -L https://raw.githubusercontent.com/fellipec/customshell/main/fsearch-update.timer --output "$HOME/.config/systemd/user/fsearch-update.timer"
         systemctl --user daemon-reload
