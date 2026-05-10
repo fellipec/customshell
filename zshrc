@@ -119,23 +119,27 @@ unsetopt no_match
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-
 # Be paranoid
 alias cp="cp -ip"
 alias rm="rm -i"
 alias mv="mv -i"
 
-
+# General alias
 alias cls="clear"
 alias ls="lsd"
 alias bat="batcat --theme=Dracula"
-alias cat="batcat --paging=never --theme=Dracula"
+alias cat="batcat --paging=never --theme=ansi"
 alias upd="sudo apt update && sudo apt upgrade"
 alias tracert="traceroute"
 alias ping="ping -O"
 alias catlog="cat -l log"
 alias ffmpeg='ffmpeg -hide_banner'
 alias ffprobe='ffprobe -hide_banner'
+
+# Restic Backup Environment
+source "$HOME/.local/bin/resticenv"
+
+# Install zoxide as cd
 eval "$(zoxide init zsh --cmd cd)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

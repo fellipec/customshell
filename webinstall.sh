@@ -37,6 +37,7 @@ read -p "Try to install Restic Scripts (Only works connected to the personal net
 if [[ $RESTICSCRIPTS =~ ^[Yy]$ ]]; then
     mkdir -p "$HOME/.local/bin" "$HOME/.config/systemd/user"
     scp scarlett.vpn:backuprestic "$HOME/.local/bin/backuprestic"
+    scp scarlett.vpn:resticenv "$HOME/.local/bin/resticenv"
     scp scarlett.vpn:restic-excludes.txt "$HOME/.local/bin/restic-excludes.txt"
     scp scarlett.vpn:restic-backup.service "$HOME/.config/systemd/user/restic-backup.service"
     scp scarlett.vpn:restic-backup.timer "$HOME/.config/systemd/user/restic-backup.timer"
