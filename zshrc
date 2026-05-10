@@ -134,6 +134,8 @@ alias upd="sudo apt update && sudo apt upgrade"
 alias tracert="traceroute"
 alias ping="ping -O"
 alias catlog="cat -l log"
+alias ffmpeg='ffmpeg -hide_banner'
+alias ffprobe='ffprobe -hide_banner'
 eval "$(zoxide init zsh --cmd cd)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
